@@ -1,0 +1,48 @@
+---
+title: "hw2"
+format: html
+editor: visual
+---
+
+## Problem1 - Modified Random walk
+
+#version 1:using a loop
+```{r}
+random_walk_loop <- function(steps){
+  position <- 0
+  for (i in 1:steps){
+    if(runif(1) < 0.5){
+      # Right: 5% chance of +10, otherwise +1
+      if(runif(1) < 0.05){
+        move <- 10
+      } else{
+        move <- 1
+      }
+    } else {
+      # Left: 20% chance of -3, otherwise -1
+      if (runif(1) < 0.20){
+        move <- 3
+      } else{
+        move <- -1
+      }
+    }
+    position <- position + move
+  }
+  return(position)
+}
+```
+
+#version 2:using vectorized R operations
+
+```{r}
+random_walk_vectorized <- function(steps) {
+  #Generate steps: TRUE = right, FALSE = left
+  right <- runif(steps) < 0.5
+  moves <- numeric(steps)
+  
+  #Handle right moves
+  
+}
+```
+
+The `echo: false` option disables the printing of code (only output is displayed).
