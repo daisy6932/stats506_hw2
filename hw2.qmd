@@ -6,7 +6,122 @@ editor: visual
 
 ## Problem1 - Modified Random walk
 
-#version 1:using a loop
+#3 versions with required input and output
+```{r}
+#' Simulate a custom random walk using a for-loop
+#'
+#' This function simulates a 1-dimensional random walk starting at 0.
+#' At each of \code{n_steps}:
+#' \itemize{
+#'   \item 50\% chance to move +1, but 5\% of those times move +10 instead.
+#'   \item 50\% chance to move -1, but 20\% of those times move -3 instead.
+#' }
+#'
+#' @param n_steps Integer. Number of steps in the random walk.
+#'
+#' @return Integer. The final position after the random walk.
+#'
+#' @examples
+#' set.seed(42)
+#' random_walk_loop(10)
+random_walk1 <- function(n_steps) {
+  pos <- 0
+  for (i in seq_len(n_steps)) {
+    if (runif(1) < 0.5) {              # choose +1
+      if (runif(1) < 0.05) {
+        pos <- pos + 10
+      } else {
+        pos <- pos + 1
+      }
+    } else {                           # choose -1
+      if (runif(1) < 0.2) {
+        pos <- pos - 3
+      } else {
+        pos <- pos - 1
+      }
+    }
+  }
+  return(pos)
+}
+```
+
+```{r}
+#' Simulate a custom random walk using vectorized R functions (no loops)
+#'
+#' This function simulates a 1-dimensional random walk using vectorized operations.
+#' At every step:
+#' \itemize{
+#'   \item 50\% chance to move +1, but 5\% of those times move +10 instead.
+#'   \item 50\% chance to move -1, but 20\% of those times move -3 instead.
+#' }
+#'
+#' @param n_steps Integer. Number of steps in the random walk.
+#'
+#' @return Integer. The final position after the random walk.
+#'
+#' @examples
+#' set.seed(42)
+#' random_walk_vectorized(10)
+random_walk2 <- function(n_steps) {
+  steps     <- sample(c(1, -1), n_steps, replace = TRUE)
+  plus_ten  <- which(steps == 1 & runif(n_steps) < 0.05)
+  minus_3   <- which(steps == -1 & runif(n_steps) < 0.20)
+  steps[plus_ten] <- 10
+  steps[minus_3]  <- -3
+  sum(steps)
+}
+```
+
+```{r}
+#' Simulate a custom random walk using sapply
+#'
+#' This function simulates a 1-dimensional random walk by applying a function
+#' across all steps with \code{sapply}. Each step:
+#' \itemize{
+#'   \item Has a 50\% chance to move +1, but 5\% of those times move +10 instead.
+#'   \item Has a 50\% chance to move -1, but 20\% of those times move -3 instead.
+#' }
+#'
+#' @param n_steps Integer. Number of steps in the random walk.
+#'
+#' @return Integer. The final position after the random walk.
+#'
+#' @examples
+#' set.seed(42)
+#' random_walk_apply(10)
+random_walk3 <- function(n_steps) {
+  single_step <- function(x) {
+    if (runif(1) < 0.5) {              
+      if (runif(1) < 0.05) 10 else 1
+    } else {                           
+      if (runif(1) < 0.2) -3 else -1
+    }
+  }
+  moves <- sapply(seq_len(n_steps), single_step)
+  sum(moves)
+}
+```
+#test 3 versions
+```{r}
+random_walk1(10)
+```
+```{r}
+random_walk2(10)
+```
+```{r}
+random_walk3(10)
+```
+```{r}
+random_walk1(1000)
+```
+```{r}
+random_walk2(1000)
+```
+```{r}
+random_walk3(1000)
+```
+
+#control randomization
 ```{r}
 #' 1D Modified Random Walk (Loop, Explicit Random Sequence)
 #'
@@ -39,7 +154,6 @@ random_walk1_consistent <- function(n, directions, rplus, rminus) {
 }
 ```
 
-#version 2:using vectorized R operations
 
 ```{r}
 #' 1D Modified Random Walk (Vectorized, Explicit Random Sequence)
@@ -67,7 +181,6 @@ random_walk2_consistent <- function(n, directions, rplus, rminus) {
 
 ```
 
-#version 3:using apply
 
 ```{r}
 #' 1D Modified Random Walk (Apply, Explicit Random Sequence)
@@ -141,8 +254,9 @@ mb1 <- microbenchmark(
   times = 100
 )
 print(mb1)
-
-# 对大数据量再来一轮
+```
+```{r}
+# n=100000
 set.seed(314)
 n_large <- 100000
 directions <- sample(c(-1, 1), n_large, replace = TRUE)
@@ -153,11 +267,14 @@ mb2 <- microbenchmark(
   rw1 = random_walk1_consistent(n_large, directions, rplus, rminus),
   rw2 = random_walk2_consistent(n_large, directions, rplus, rminus),
   rw3 = random_walk3_consistent(n_large, directions, rplus, rminus),
-  times = 10   # 大数据时减少重复次数
+  times = 10   
 )
 print(mb2)
 ```
 
+The benchmark results clearly demonstrate substantial differences in performance among the three implementations of the random walk. The fully vectorized version (rw2) is by far the most efficient, with an average execution time of about 60 ms for 100,000 steps. In contrast, the for-loop implementation (rw1) is the slowest, taking an average of approximately 830 ms, while the apply-based approach (rw3) performs somewhat better than the loop but is still significantly slower than the vectorized solution.
+
+These results highlight a fundamental aspect of programming in R: vectorized code is vastly more efficient for large-scale simulations than explicit loops or apply-family functions. This efficiency stems from R's optimization for operations on whole vectors and matrices, which are typically implemented in highly optimized, compiled code under the hood. Conversely, loops and apply functions operate at the interpreted language level, imposing greater overhead per iteration.
 #Monte Carlo Simulation for Probability of Ending at Zero
 ```{r}
 estimate_zero_prob <- function(n, Nsim = 100000, seed = NULL) {
@@ -170,49 +287,48 @@ estimate_zero_prob <- function(n, Nsim = 100000, seed = NULL) {
   })
   mean(results)
 }
-
-estimate_zero_prob(10, 100000, seed = 42)   # e.g., 0.008
-estimate_zero_prob(100, 100000, seed = 42)  # e.g., 0.0003
-estimate_zero_prob(1000, 100000, seed = 42) # e.g., 0 (or very very small)
+print(estimate_zero_prob(10, 100000, seed = 42))
+print(estimate_zero_prob(100, 100000, seed = 42))  
+print(estimate_zero_prob(1000, 100000, seed = 42)) 
 ```
+The simulation results show that, for small 
+n
+ (such as 10), the probability that the random walk returns exactly to 0 is about 0.13. This is significantly lower than the pure ±1 random walk case (which would be around 0.25 for n = 10), due to the presence of the +10 and -3 steps that make exact cancellation less likely. For n = 100, the probability drops an order of magnitude to approximately 0.02, and for n = 1000, it becomes less than 0.006. This rapid decrease aligns with expectation: as the number of steps increases—and the chance of having one or more large jumps increases—the probability of precisely returning to zero by pure chance becomes astronomically small. The Monte Carlo simulation here robustly demonstrates this trend and supports the theoretical intuition.
+ 
 # 2
 ```{r}
-n_sims <- 100000
-hour_types <- c(
-  rep("night", 8),
-  "rush",
-  rep("work", 8),
-  "rush",
-  rep("evening", 6)
-)
-car_mat <- sapply(seq_along(hour_types), function(hr){
-  switch(hour_types[hr],
-         night = rpois(n_sims, 1),
-         work = rpois(n_sims, 8),
-         evening = rpois(n_sims, 12),
-         rush = round(rnorm(n_sims, mean=60, sd=sqrt(12)))
+#' Estimate the average number of cars passing an intersection per day
+#'
+#' Uses a vectorized Monte Carlo simulation to estimate the average daily number of cars, 
+#' given time-dependent distributions for different hours:
+#' - From midnight to 7am (7 hours): Poisson with mean 1.
+#' - 8am and 5pm (rush hours): Normal with mean 60 and variance 12 (i.e., standard deviation sqrt(12)).
+#' - From 9am to 4pm (8 hours): Poisson with mean 8.
+#' - From 6pm to 11pm (6 hours): Poisson with mean 12.
+#'
+#' @param N Integer. Number of days to simulate (simulation size). Default is 10,000.
+#'
+#' @return Numeric. The estimated average number of cars per day.
+#'
+#' @examples
+#' estimate_daily_cars()
+estimate_daily_cars <- function(N = 10000) {
+  cars_mat <- cbind(
+    matrix(rpois(N*7, 1),    nrow = N),                # Midnight - 7am
+    matrix(rnorm(N, 60, sqrt(12)), ncol = 1),          # 8am rush
+    matrix(rpois(N*8, 8),    nrow = N),                # 9am - 4pm
+    matrix(rnorm(N, 60, sqrt(12)), ncol = 1),          # 5pm rush
+    matrix(rpois(N*6, 12),   nrow = N)                 # 6pm - 11pm
   )
-})
-mean(rowSums(car_mat))
-```
-
-```{r}
-n_sims <- 1e5
-day_totals <- replicate(n_sims, {
-  sum(
-    rpois(8, 1),
-    round(rnorm(1, 60, sqrt(12))),
-    rpois(8, 8),
-    round(rnorm(1, 60, sqrt(12))),
-    rpois(6, 12)
-  )
-})
-mean(day_totals)
+  daily_totals <- rowSums(cars_mat)
+  mean(daily_totals)
+}
+estimate_daily_cars()
 ```
 
 # 3
 
-# Download, de-identify, and report dimensions
+#a
 ```{r}
 # Download the data
 youtube <- read.csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-03-02/youtube.csv")
@@ -222,8 +338,8 @@ names(youtube)
 
 # List columns that could serve as identifiers for unique commercials
 id_cols <- c(
-  "brand", "brand_url", "youtube_url", "channel", "channel_url",
-  "date_published", "video", "description", "superbowl_ads_dot_com_url"
+  "brand", "superbowl_ads_dot_com_url", "youtube_url", "id", "kind", "etag",
+  "published_at", "description", "thumbnail", "title", "channel_title"
 )
 
 # Remove identifying columns (but keep 'year' because it's required as a predictor)
@@ -234,65 +350,111 @@ dim(yt_deid)
 
 ```
 
-# Examine and classify each engagement variable
+# b
 ```{r}
 library(ggplot2)
 
 # List the engagement metrics
 vars <- c("view_count", "like_count", "dislike_count", "favorite_count", "comment_count")
 
+# Summary statistics
+summary(yt_deid[ , vars])
+
+sapply(yt_deid[ , vars], function(x) sum(x == 0, na.rm = TRUE))
+sapply(yt_deid[ , vars], function(x) sum(is.na(x)))
 # Plot histograms to check distribution for each variable
+par(mfrow = c(2,3))
 for (v in vars) {
-  print(v)
-  print(summary(yt_deid[[v]]))
-  print(
-    ggplot(yt_deid, aes_string(x = v)) +
-      geom_histogram(bins = 30) +
-      labs(title = v)
-  )
+  hist(yt_deid[[v]], main = v, xlab = v)
 }
 ```
+After examining the summary statistics, zero counts, and missing values for each of the five engagement variables (view_count, like_count, dislike_count, favorite_count, and comment_count), I found that:
+
+All five variables are highly right-skewed count variables, with a substantial number of low values—often zero—and a small number of very high values.
+The distributions, as visualized in the histograms, are all far from symmetric or normal. In particular, there is a long tail towards very high values.
+There are some missing values (1–2% of cases in some variables) but overall, the variables contain useful numeric information for regression.
+Accordingly, none of the count variables are appropriate to use as-is (category i) as outcomes in a linear regression model. However, all are appropriate to use after a log(x+1) transformation (category ii), which reduces right skewness and improves model assumptions. No variable is completely inappropriate for modeling (category iii).
 
 #Fit regression models for appropriate outcomes
 ```{r}
 # Prepare transformed variables for regression modeling
-yt_deid$log_view_count     <- log1p(yt_deid$view_count)
-yt_deid$log_like_count    <- log1p(yt_deid$like_count)
-yt_deid$log_dislike_count <- log1p(yt_deid$dislike_count)
-yt_deid$log_comment_count <- log1p(yt_deid$comment_count)
+yt_deid$log_view_count      <- log1p(yt_deid$view_count)
+yt_deid$log_like_count      <- log1p(yt_deid$like_count)
+yt_deid$log_dislike_count   <- log1p(yt_deid$dislike_count)
+yt_deid$log_favorite_count  <- log1p(yt_deid$favorite_count)
+yt_deid$log_comment_count   <- log1p(yt_deid$comment_count)
 
 # List binary flag variables to use as predictors
 flags <- c("funny","show_product_quickly","patriotic","celebrity","danger","animals","use_sex")
 
 # Build regression formula for e.g., log(view_count)
-formula_str <- paste("log_view_count ~", paste(flags, collapse = " + "), "+ year")
-model_view <- lm(formula(formula_str), data = yt_deid)
-summary(model_view)
+lm_view     <- lm(log_view_count      ~ funny + show_product_quickly + patriotic + 
+                    celebrity + danger + animals + use_sex + year, data = yt_deid)
+lm_like     <- lm(log_like_count      ~ funny + show_product_quickly + patriotic + 
+                    celebrity + danger + animals + use_sex + year, data = yt_deid)
+lm_dislike  <- lm(log_dislike_count   ~ funny + show_product_quickly + patriotic + 
+                    celebrity + danger + animals + use_sex + year, data = yt_deid)
+lm_favorite <- lm(log_favorite_count  ~ funny + show_product_quickly + patriotic + 
+                    celebrity + danger + animals + use_sex + year, data = yt_deid)
+lm_comment  <- lm(log_comment_count   ~ funny + show_product_quickly + patriotic + 
+                    celebrity + danger + animals + use_sex + year, data = yt_deid)
 
-# Do the same for other appropriate outcome variables
-model_like <- lm(log_like_count ~ funny + show_product_quickly + patriotic + celebrity +
-                   danger + animals + use_sex + year, data = yt_deid)
-summary(model_like)
-
-model_dislike <- lm(log_dislike_count ~ funny + show_product_quickly + patriotic + celebrity +
-                      danger + animals + use_sex + year, data = yt_deid)
-summary(model_dislike)
-
-model_comment <- lm(log_comment_count ~ funny + show_product_quickly + patriotic + celebrity +
-                      danger + animals + use_sex + year, data = yt_deid)
-summary(model_comment)
+summary(lm_view)
+summary(lm_like)
+summary(lm_dislike)
+summary(lm_favorite)
+summary(lm_comment)
 ```
+I fitted linear regression models for each of the log-transformed engagement metrics (view_count, like_count, dislike_count, favorite_count, and comment_count), using the seven binary ad characteristic flags and year as a predictor.
 
+1. View Count (log_view_count)
+No statistically significant predictors.
+All predictors—including each ad feature and year—had p-values well above the conventional 0.05 threshold.
+The overall model was not significant either (R² ≈ 0.03, F(8,222) = 0.77, p = 0.63), indicating that these ad characteristics do not explain much of the variation in view counts.
+2. Like Count (log_like_count)
+Year is statistically significant (p = 0.016, positive estimate).
+This suggests that, holding all other variables constant, ads from more recent years tend to have higher like counts.
+Danger (p = 0.089) and Patriotic (p = 0.107) are marginally significant with positive estimates.
+The overall model is significant at the 0.05 level (R² ≈ 0.07, F(8,216) = 2.13, p = 0.034).
+3. Dislike Count (log_dislike_count)
+Year is statistically significant (p < 0.001, positive estimate).
+More recent ads tend to have higher dislike counts, controlling for other factors.
+Patriotic is marginally significant (p = 0.053, positive estimate).
+The overall model explains about 10% of the variation and is significant (F(8,216) = 2.92, p = 0.0041).
+4. Favorite Count (log_favorite_count)
+No variation or information in the model.
+All coefficients and statistics are zero or "NaN" (Not a Number). This is likely because almost all favorite_count values are zero or missing, so there is no variance to model. Thus, this outcome is not appropriate for linear regression.
+5. Comment Count (log_comment_count)
+No statistically significant predictors at the 0.05 level.
+Year (p = 0.057) and Patriotic (p = 0.096) are marginally significant with positive estimates.
+The overall model is not significant (R² ≈ 0.07, F(8,213) = 1.86, p = 0.067).
+
+For most outcomes, none of the ad characteristic flags (e.g., funny, celebrity, use_sex) were statistically significant predictors of engagement metrics after controlling for year.
+The only clearly statistically significant predictor across the models was year, with a positive direction—that is, more recent ads tend to get more likes and dislikes and show a trend towards more comments.
+The effect of "patriotic" was marginally positive for dislikes and comments, and "danger" was marginally positive for likes, suggesting a possible (but not solid) association.
+Favorite count is not suitable as an outcome for regression analysis due to a lack of variation.
+Overall, the models explain only a small fraction of the variation in engagement; R-squared values are in the range of 0.03 to 0.10. This suggests that ad creative flags and year, as coded here, are not strong determinants of YouTube engagement metrics in this dataset. Other factors—such as ad spending, channel subscriber base, or promotion strategies—may play a much larger role.
 #Manually compute regression coefficients for log(view_count)
 ```{r}
-# Construct design matrix based on R's default coding (intercept included)
-X <- model.matrix(~ funny + show_product_quickly + patriotic + celebrity + danger + animals + use_sex + year, yt_deid)
-y <- yt_deid$log_view_count
+# Specify the formula and get the design matrix and outcome
+fmla <- log_view_count ~ funny + show_product_quickly + patriotic +
+  celebrity + danger + animals + use_sex + year
+
+yt_complete <- na.omit(yt_deid[, all.vars(fmla)])  # Remove rows with NA in any relevant column
+
+X <- model.matrix(fmla, data = yt_complete)
+y <- yt_complete$log_view_count
 
 # Compute the OLS solution: beta_hat = (X'X)⁻¹ X'y
 beta_hat <- solve(t(X) %*% X) %*% t(X) %*% y
+beta_hat
 
-# Compare with coefficients from lm
-as.numeric(beta_hat)      # Manual calculation
-coef(model_view)          # From lm; should be identical (up to rounding)
+model = lm(fmla, data = yt_deid)
+coef(model)  # Should match beta_hat
 ```
+
+To verify the regression results, I manually computed the OLS estimates for the view count regression using matrix algebra. After building the same design matrix as in part c, I calculated the coefficients as $\hat{\beta} = (X^TX)^{-1} X^T y$. The resulting coefficient vector was:
+
+[output of beta_hat]
+
+These values are numerically identical to those produced by the lm function in R, confirming that the linear regression coefficients are estimated correctly by both approaches.
