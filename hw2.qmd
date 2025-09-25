@@ -1,12 +1,15 @@
 ---
-title: "hw2"
+title: "Daixi Huang hw2"
 format: html
 editor: visual
 ---
 
+#https://github.com/daisy6932/stats506_hw2
+
 ## Problem1 - Modified Random walk
 
 #3 versions with required input and output
+
 ```{r}
 #' Simulate a custom random walk using a for-loop
 #'
@@ -101,27 +104,20 @@ random_walk3 <- function(n_steps) {
   sum(moves)
 }
 ```
+
 #test 3 versions
+
 ```{r}
 random_walk1(10)
-```
-```{r}
 random_walk2(10)
-```
-```{r}
 random_walk3(10)
-```
-```{r}
 random_walk1(1000)
-```
-```{r}
 random_walk2(1000)
-```
-```{r}
 random_walk3(1000)
 ```
 
 #control randomization
+
 ```{r}
 #' 1D Modified Random Walk (Loop, Explicit Random Sequence)
 #'
@@ -154,7 +150,6 @@ random_walk1_consistent <- function(n, directions, rplus, rminus) {
 }
 ```
 
-
 ```{r}
 #' 1D Modified Random Walk (Vectorized, Explicit Random Sequence)
 #'
@@ -180,7 +175,6 @@ random_walk2_consistent <- function(n, directions, rplus, rminus) {
 }
 
 ```
-
 
 ```{r}
 #' 1D Modified Random Walk (Apply, Explicit Random Sequence)
@@ -213,6 +207,7 @@ random_walk3_consistent <- function(n, directions, rplus, rminus) {
 ```
 
 #Demonstrate Equivalence(Set Seed for Reproducibility)
+
 ```{r}
 set.seed(314)
 n <- 1000
@@ -220,24 +215,27 @@ directions <- sample(c(-1, 1), n, replace=TRUE)
 rplus <- runif(n)
 rminus <- runif(n)
 
-random_walk1_consistent(n, directions, rplus, rminus)
-random_walk2_consistent(n, directions, rplus, rminus)
-random_walk3_consistent(n, directions, rplus, rminus)
+print(random_walk1_consistent(n, directions, rplus, rminus))
+print(random_walk2_consistent(n, directions, rplus, rminus))
+print(random_walk3_consistent(n, directions, rplus, rminus))
 
+```
 
+```{r}
 set.seed(42)
 n <- 10
 directions <- sample(c(-1, 1), n, replace=TRUE)
 rplus <- runif(n)
 rminus <- runif(n)
 
-random_walk1_consistent(n, directions, rplus, rminus)
-random_walk2_consistent(n, directions, rplus, rminus)
-random_walk3_consistent(n, directions, rplus, rminus)
+print(random_walk1_consistent(n, directions, rplus, rminus))
+print(random_walk2_consistent(n, directions, rplus, rminus))
+print(random_walk3_consistent(n, directions, rplus, rminus))
 
 ```
 
 #Benchmarking
+
 ```{r}
 library(microbenchmark)
 
@@ -255,6 +253,7 @@ mb1 <- microbenchmark(
 )
 print(mb1)
 ```
+
 ```{r}
 # n=100000
 set.seed(314)
@@ -274,8 +273,8 @@ print(mb2)
 
 The benchmark results clearly demonstrate substantial differences in performance among the three implementations of the random walk. The fully vectorized version (rw2) is by far the most efficient, with an average execution time of about 60 ms for 100,000 steps. In contrast, the for-loop implementation (rw1) is the slowest, taking an average of approximately 830 ms, while the apply-based approach (rw3) performs somewhat better than the loop but is still significantly slower than the vectorized solution.
 
-These results highlight a fundamental aspect of programming in R: vectorized code is vastly more efficient for large-scale simulations than explicit loops or apply-family functions. This efficiency stems from R's optimization for operations on whole vectors and matrices, which are typically implemented in highly optimized, compiled code under the hood. Conversely, loops and apply functions operate at the interpreted language level, imposing greater overhead per iteration.
-#Monte Carlo Simulation for Probability of Ending at Zero
+These results highlight a fundamental aspect of programming in R: vectorized code is vastly more efficient for large-scale simulations than explicit loops or apply-family functions. This efficiency stems from R's optimization for operations on whole vectors and matrices, which are typically implemented in highly optimized, compiled code under the hood. Conversely, loops and apply functions operate at the interpreted language level, imposing greater overhead per iteration. #Monte Carlo Simulation for Probability of Ending at Zero
+
 ```{r}
 estimate_zero_prob <- function(n, Nsim = 100000, seed = NULL) {
   if (!is.null(seed)) set.seed(seed)
@@ -291,11 +290,11 @@ print(estimate_zero_prob(10, 100000, seed = 42))
 print(estimate_zero_prob(100, 100000, seed = 42))  
 print(estimate_zero_prob(1000, 100000, seed = 42)) 
 ```
-The simulation results show that, for small 
-n
- (such as 10), the probability that the random walk returns exactly to 0 is about 0.13. This is significantly lower than the pure ±1 random walk case (which would be around 0.25 for n = 10), due to the presence of the +10 and -3 steps that make exact cancellation less likely. For n = 100, the probability drops an order of magnitude to approximately 0.02, and for n = 1000, it becomes less than 0.006. This rapid decrease aligns with expectation: as the number of steps increases—and the chance of having one or more large jumps increases—the probability of precisely returning to zero by pure chance becomes astronomically small. The Monte Carlo simulation here robustly demonstrates this trend and supports the theoretical intuition.
- 
+
+The simulation results show that, for small n (such as 10), the probability that the random walk returns exactly to 0 is about 0.13. This is significantly lower than the pure ±1 random walk case (which would be around 0.25 for n = 10), due to the presence of the +10 and -3 steps that make exact cancellation less likely. For n = 100, the probability drops an order of magnitude to approximately 0.02, and for n = 1000, it becomes less than 0.006. This rapid decrease aligns with expectation: as the number of steps increases—and the chance of having one or more large jumps increases—the probability of precisely returning to zero by pure chance becomes astronomically small. The Monte Carlo simulation here robustly demonstrates this trend and supports the theoretical intuition.
+
 # 2
+
 ```{r}
 #' Estimate the average number of cars passing an intersection per day
 #'
@@ -329,6 +328,7 @@ estimate_daily_cars()
 # 3
 
 #a
+
 ```{r}
 # Download the data
 youtube <- read.csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-03-02/youtube.csv")
@@ -351,6 +351,7 @@ dim(yt_deid)
 ```
 
 # b
+
 ```{r}
 library(ggplot2)
 
@@ -359,8 +360,13 @@ vars <- c("view_count", "like_count", "dislike_count", "favorite_count", "commen
 
 # Summary statistics
 summary(yt_deid[ , vars])
+```
 
+```{r}
 sapply(yt_deid[ , vars], function(x) sum(x == 0, na.rm = TRUE))
+```
+
+```{r}
 sapply(yt_deid[ , vars], function(x) sum(is.na(x)))
 # Plot histograms to check distribution for each variable
 par(mfrow = c(2,3))
@@ -368,14 +374,13 @@ for (v in vars) {
   hist(yt_deid[[v]], main = v, xlab = v)
 }
 ```
+
 After examining the summary statistics, zero counts, and missing values for each of the five engagement variables (view_count, like_count, dislike_count, favorite_count, and comment_count), I found that:
 
-All five variables are highly right-skewed count variables, with a substantial number of low values—often zero—and a small number of very high values.
-The distributions, as visualized in the histograms, are all far from symmetric or normal. In particular, there is a long tail towards very high values.
-There are some missing values (1–2% of cases in some variables) but overall, the variables contain useful numeric information for regression.
-Accordingly, none of the count variables are appropriate to use as-is (category i) as outcomes in a linear regression model. However, all are appropriate to use after a log(x+1) transformation (category ii), which reduces right skewness and improves model assumptions. No variable is completely inappropriate for modeling (category iii).
+All five variables are highly right-skewed count variables, with a substantial number of low values—often zero—and a small number of very high values. The distributions, as visualized in the histograms, are all far from symmetric or normal. In particular, there is a long tail towards very high values. There are some missing values (1–2% of cases in some variables) but overall, the variables contain useful numeric information for regression. Accordingly, none of the count variables are appropriate to use as-is (category i) as outcomes in a linear regression model. However, all are appropriate to use after a log(x+1) transformation (category ii), which reduces right skewness and improves model assumptions. No variable is completely inappropriate for modeling (category iii).
 
 #Fit regression models for appropriate outcomes
+
 ```{r}
 # Prepare transformed variables for regression modeling
 yt_deid$log_view_count      <- log1p(yt_deid$view_count)
@@ -405,36 +410,17 @@ summary(lm_dislike)
 summary(lm_favorite)
 summary(lm_comment)
 ```
+
 I fitted linear regression models for each of the log-transformed engagement metrics (view_count, like_count, dislike_count, favorite_count, and comment_count), using the seven binary ad characteristic flags and year as a predictor.
 
-1. View Count (log_view_count)
-No statistically significant predictors.
-All predictors—including each ad feature and year—had p-values well above the conventional 0.05 threshold.
-The overall model was not significant either (R² ≈ 0.03, F(8,222) = 0.77, p = 0.63), indicating that these ad characteristics do not explain much of the variation in view counts.
-2. Like Count (log_like_count)
-Year is statistically significant (p = 0.016, positive estimate).
-This suggests that, holding all other variables constant, ads from more recent years tend to have higher like counts.
-Danger (p = 0.089) and Patriotic (p = 0.107) are marginally significant with positive estimates.
-The overall model is significant at the 0.05 level (R² ≈ 0.07, F(8,216) = 2.13, p = 0.034).
-3. Dislike Count (log_dislike_count)
-Year is statistically significant (p < 0.001, positive estimate).
-More recent ads tend to have higher dislike counts, controlling for other factors.
-Patriotic is marginally significant (p = 0.053, positive estimate).
-The overall model explains about 10% of the variation and is significant (F(8,216) = 2.92, p = 0.0041).
-4. Favorite Count (log_favorite_count)
-No variation or information in the model.
-All coefficients and statistics are zero or "NaN" (Not a Number). This is likely because almost all favorite_count values are zero or missing, so there is no variance to model. Thus, this outcome is not appropriate for linear regression.
-5. Comment Count (log_comment_count)
-No statistically significant predictors at the 0.05 level.
-Year (p = 0.057) and Patriotic (p = 0.096) are marginally significant with positive estimates.
-The overall model is not significant (R² ≈ 0.07, F(8,213) = 1.86, p = 0.067).
+1.  View Count (log_view_count) No statistically significant predictors. All predictors—including each ad feature and year—had p-values well above the conventional 0.05 threshold. The overall model was not significant either (R² ≈ 0.03, F(8,222) = 0.77, p = 0.63), indicating that these ad characteristics do not explain much of the variation in view counts.
+2.  Like Count (log_like_count) Year is statistically significant (p = 0.016, positive estimate). This suggests that, holding all other variables constant, ads from more recent years tend to have higher like counts. Danger (p = 0.089) and Patriotic (p = 0.107) are marginally significant with positive estimates. The overall model is significant at the 0.05 level (R² ≈ 0.07, F(8,216) = 2.13, p = 0.034).
+3.  Dislike Count (log_dislike_count) Year is statistically significant (p \< 0.001, positive estimate). More recent ads tend to have higher dislike counts, controlling for other factors. Patriotic is marginally significant (p = 0.053, positive estimate). The overall model explains about 10% of the variation and is significant (F(8,216) = 2.92, p = 0.0041).
+4.  Favorite Count (log_favorite_count) No variation or information in the model. All coefficients and statistics are zero or "NaN" (Not a Number). This is likely because almost all favorite_count values are zero or missing, so there is no variance to model. Thus, this outcome is not appropriate for linear regression.
+5.  Comment Count (log_comment_count) No statistically significant predictors at the 0.05 level. Year (p = 0.057) and Patriotic (p = 0.096) are marginally significant with positive estimates. The overall model is not significant (R² ≈ 0.07, F(8,213) = 1.86, p = 0.067).
 
-For most outcomes, none of the ad characteristic flags (e.g., funny, celebrity, use_sex) were statistically significant predictors of engagement metrics after controlling for year.
-The only clearly statistically significant predictor across the models was year, with a positive direction—that is, more recent ads tend to get more likes and dislikes and show a trend towards more comments.
-The effect of "patriotic" was marginally positive for dislikes and comments, and "danger" was marginally positive for likes, suggesting a possible (but not solid) association.
-Favorite count is not suitable as an outcome for regression analysis due to a lack of variation.
-Overall, the models explain only a small fraction of the variation in engagement; R-squared values are in the range of 0.03 to 0.10. This suggests that ad creative flags and year, as coded here, are not strong determinants of YouTube engagement metrics in this dataset. Other factors—such as ad spending, channel subscriber base, or promotion strategies—may play a much larger role.
-#Manually compute regression coefficients for log(view_count)
+For most outcomes, none of the ad characteristic flags (e.g., funny, celebrity, use_sex) were statistically significant predictors of engagement metrics after controlling for year. The only clearly statistically significant predictor across the models was year, with a positive direction—that is, more recent ads tend to get more likes and dislikes and show a trend towards more comments. The effect of "patriotic" was marginally positive for dislikes and comments, and "danger" was marginally positive for likes, suggesting a possible (but not solid) association. Favorite count is not suitable as an outcome for regression analysis due to a lack of variation. Overall, the models explain only a small fraction of the variation in engagement; R-squared values are in the range of 0.03 to 0.10. This suggests that ad creative flags and year, as coded here, are not strong determinants of YouTube engagement metrics in this dataset. Other factors—such as ad spending, channel subscriber base, or promotion strategies—may play a much larger role. #Manually compute regression coefficients for log(view_count)
+
 ```{r}
 # Specify the formula and get the design matrix and outcome
 fmla <- log_view_count ~ funny + show_product_quickly + patriotic +
@@ -455,6 +441,6 @@ coef(model)  # Should match beta_hat
 
 To verify the regression results, I manually computed the OLS estimates for the view count regression using matrix algebra. After building the same design matrix as in part c, I calculated the coefficients as $\hat{\beta} = (X^TX)^{-1} X^T y$. The resulting coefficient vector was:
 
-[output of beta_hat]
+\[output of beta_hat\]
 
 These values are numerically identical to those produced by the lm function in R, confirming that the linear regression coefficients are estimated correctly by both approaches.
