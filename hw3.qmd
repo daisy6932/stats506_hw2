@@ -5,6 +5,7 @@ editor: visual
 ---
 
 #Prob 1
+
 ```{r}
 # If they are SAS XPT files
 library(haven); library(readr); library(dplyr); library(stringr)
@@ -24,7 +25,6 @@ str(DEMO_I)
 merged <- inner_join(AUX_I, DEMO_I, by = "SEQN")
 dim(merged)
 ```
-
 
 ```{r}
 # 
@@ -59,7 +59,6 @@ m2L <- glm(tymp_L ~ gender + citizen + n_child + income, data = data, family = p
 
 ```
 
-
 ```{r}
 #Incidence Rate Ratios, sample, pseudo-R^2, AIC
 library(broom)
@@ -89,14 +88,18 @@ tab2L <- get_model_summary(m2L)
 kable(tab2L, caption = "Model 2L: Poisson Regression (Left Ear) – IRRs and Model Stats")
 
 ```
+
 #(a)
+
 ```{r}
 # Get gender IRR and CI for model 2L
 summary(m2L)
 exp(coef(m2L))
 
 ```
+
 #(b)
+
 ```{r}
 newdata <- data.frame(
   gender = c("Male", "Female"),
@@ -135,17 +138,16 @@ data.frame(
 
 Interpretation of Gender Effect in Model 2L (Left ear Poisson regression)
 
-The incidence rate ratio (IRR) for the "genderFemale" variable is 1.025, with a 95% confidence interval [1.017, 1.033] and a p-value < 0.001. This means that, holding citizenship status, number of young children, and household income constant, females have on average a 2.5% higher expected tympanometric width in the left ear compared to males.
+The incidence rate ratio (IRR) for the "genderFemale" variable is 1.025, with a 95% confidence interval \[1.017, 1.033\] and a p-value \< 0.001. This means that, holding citizenship status, number of young children, and household income constant, females have on average a 2.5% higher expected tympanometric width in the left ear compared to males.
 
-The result is statistically significant (z = 6.07, p = 1.29e-09).
-The difference on the link (log) scale is 0.0245 (also highly significant).
+The result is statistically significant (z = 6.07, p = 1.29e-09). The difference on the link (log) scale is 0.0245 (also highly significant).
 
 However, the effect size is small: although statistically significant due to the large sample size (N = 2945), the practical difference between males and females is minor.
 
-In summary: 
-There is strong evidence of a difference in tympanometric width between men and women (p < 0.001), but the predicted value for females is only slightly higher than for males.
+In summary: There is strong evidence of a difference in tympanometric width between men and women (p \< 0.001), but the predicted value for females is only slightly higher than for males.
 
 #Prob2
+
 ```{r}
 library(DBI)
 library(RSQLite)
@@ -155,3 +157,273 @@ library(microbenchmark)
 con <- dbConnect(RSQLite::SQLite(), "sakila_master.db")
 dbListTables(con)
 ```
+#(a)
+```{r}
+#First solution
+# Step 1: extract the required table
+store_df <- dbReadTable(con, "store")
+customer_df <- dbReadTable(con, "customer")
+
+# Step 2: processing in R
+store_customers <- customer_df %>%
+  group_by(store_id) %>%
+  summarise(
+    total_customers = n(),
+    active_customers = sum(active == 1),
+    active_pct = 100 * mean(active == 1)
+  )
+
+#Second solution
+store_customers
+query1 <- "
+SELECT 
+  store_id,
+  COUNT(customer_id) AS total_customers,
+  SUM(active = 1) AS active_customers,
+  100.0 * AVG(active = 1) AS active_pct
+FROM customer
+GROUP BY store_id;
+"
+
+sql_result1 <- dbGetQuery(con, query1)
+sql_result1
+
+```
+
+```{r}
+microbenchmark(
+  R_way = {
+    store_customers <- customer_df %>%
+      group_by(store_id) %>%
+      summarise(
+        total_customers = n(),
+        active_customers = sum(active == 1),
+        active_pct = 100 * mean(active == 1)
+      )
+  },
+  SQL_way = { dbGetQuery(con, query1) },
+  times = 20
+)
+
+```
+#(b)
+```{r}
+staff_country <- staff_df %>%
+  left_join(store_df, by = "store_id") %>%
+  left_join(address_df, by = c("address_id.y" = "address_id")) %>%
+  left_join(city_df, by = "city_id") %>%
+  left_join(country_df, by = "country_id") %>%
+  transmute(
+    staff_name = paste(first_name, last_name),
+    country
+  )
+print(staff_country)
+
+```
+
+```{r}
+query2 <- "
+SELECT 
+  s.first_name || ' ' || s.last_name AS staff_name,
+  ctry.country
+FROM staff AS s
+JOIN store st ON s.store_id = st.store_id
+JOIN address a ON s.address_id = a.address_id
+JOIN city ci ON a.city_id = ci.city_id
+JOIN country ctry ON ci.country_id = ctry.country_id;
+"
+
+sql_result2 <- dbGetQuery(con, query2)
+sql_result2
+```
+
+```{r}
+microbenchmark(
+  R_way = {
+    staff_country <- staff_df %>%
+  left_join(store_df, by = "store_id") %>%
+  left_join(address_df, by = c("address_id.y" = "address_id")) %>%
+  left_join(city_df, by = "city_id") %>%
+  left_join(country_df, by = "country_id") %>%
+  transmute(
+    staff_name = paste(first_name, last_name),
+    country
+  )
+  },
+  SQL_way = { dbGetQuery(con, query2) },
+  times = 20
+)
+```
+#(c)
+```{r}
+rental_df <- dbReadTable(con, "rental")
+payment_df <- dbReadTable(con, "payment")
+inventory_df <- dbReadTable(con, "inventory")
+film_df <- dbReadTable(con, "film")
+
+film_value <- rental_df %>%
+  left_join(payment_df, by = "rental_id") %>%
+  left_join(inventory_df, by = "inventory_id") %>%
+  left_join(film_df, by = "film_id") %>%
+  group_by(title) %>%
+  summarise(total_revenue = sum(amount, na.rm = TRUE)) %>%
+  filter(total_revenue == max(total_revenue))
+
+film_value
+```
+```{r}
+query3 <- "
+WITH film_revenue AS (
+  SELECT 
+    f.title,
+    SUM(p.amount) AS total_revenue
+  FROM film f
+  JOIN inventory i ON f.film_id = i.film_id
+  JOIN rental r ON i.inventory_id = r.inventory_id
+  JOIN payment p ON r.rental_id = p.rental_id
+  GROUP BY f.title
+)
+SELECT 
+  title,
+  total_revenue
+FROM film_revenue
+WHERE total_revenue = (SELECT MAX(total_revenue) FROM film_revenue);
+"
+
+sql_result3 <- dbGetQuery(con, query3)
+sql_result3
+
+```
+```{r}
+microbenchmark(
+  R_way = {
+    film_value <- rental_df %>%
+      left_join(payment_df, by = "rental_id") %>%
+      left_join(inventory_df, by = "inventory_id") %>%
+      left_join(film_df, by = "film_id") %>%
+      group_by(title) %>%
+      summarise(total_revenue = sum(amount, na.rm = TRUE)) %>%
+      filter(total_revenue == max(total_revenue))
+  },
+  SQL_way = { dbGetQuery(con, query3) },
+  times = 20
+)
+```
+
+#Prob3
+```{r}
+library(tidyverse)
+library(stringr)
+
+# reading in data
+australia <- read_csv("au-500.csv")
+
+# view data structure
+glimpse(australia)
+```
+
+```{r}
+# extract website suffix
+australia <- australia %>%
+  mutate(domain_suffix = str_extract(web, "[^.]+\\.[^.]+$"))
+
+table(australia$domain_suffix)
+
+pct_com <- mean(australia$domain_suffix == "com") * 100
+pct_com
+
+```
+
+```{r}
+#find the most common domain name amongst the email
+australia <- australia %>%
+  mutate(email_domain = str_extract(email, "(?<=@).*"))
+
+most_common_domain <- australia %>%
+  count(email_domain, sort = TRUE) %>%
+  slice(1)
+
+most_common_domain
+```
+
+```{r}
+#exclude commas and whitespace
+australia <- australia %>%
+  mutate(non_alpha = str_detect(company_name, "[^A-Za-z ,]"))
+
+mean(australia$non_alpha, na.rm = TRUE)
+
+#exclude ampersands
+australia <- australia %>%
+  mutate(non_alpha_no_amp = str_detect(company_name, "[^A-Za-z ,&]"))
+
+mean(australia$non_alpha_no_amp, na.rm = TRUE)
+```
+
+```{r}
+format_to_cell <- function(phone) {
+  digits <- str_replace_all(phone, "\\D", "")
+  # landline: 12-3456-7890 (10 digits)
+  # convert to 1234-567-890 (cell format)
+  if (nchar(digits) == 10) {
+    formatted <- str_replace(digits, "^(\\d{2})(\\d{4})(\\d{4})$", "\\1\\2\\3")
+    formatted <- str_replace(formatted, "(\\d{4})(\\d{3})(\\d{3})", "\\1-\\2-\\3")
+  } else {
+    formatted <- NA
+  }
+  formatted
+}
+
+australia <- australia %>%
+  mutate(
+    phone1_new = map_chr(phone1, format_to_cell),
+    phone2_new = map_chr(phone2, format_to_cell)
+  )
+
+australia %>%
+  select(phone1, phone1_new, phone2, phone2_new) %>%
+  slice(1:10)
+
+```
+
+```{r}
+australia <- australia %>%
+  mutate(apt_number = str_extract(address, "\\d+$"),
+         apt_number = as.numeric(apt_number))
+
+# plot
+australia %>%
+  filter(!is.na(apt_number)) %>%
+  ggplot(aes(x = log(apt_number))) +
+  geom_histogram(bins = 30, fill = "steelblue") +
+  labs(title = "Histogram of log(Apartment Numbers)",
+       x = "log(Apartment Number)", y = "Count")
+```
+
+```{r}
+benford_dist <- tibble(
+  digit = 1:9,
+  expected = log10(1 + 1 / (1:9))
+)
+
+
+actual <- australia %>%
+  filter(!is.na(apt_number)) %>%
+  mutate(first_digit = as.numeric(str_sub(as.character(apt_number), 1, 1))) %>%
+  count(first_digit) %>%
+  mutate(actual = n / sum(n))
+
+
+compare_benford <- left_join(benford_dist, actual, by = c("digit" = "first_digit"))
+
+
+compare_benford %>%
+  pivot_longer(cols = c(expected, actual), names_to = "type", values_to = "proportion") %>%
+  ggplot(aes(x = factor(digit), y = proportion, fill = type)) +
+  geom_col(position = "dodge") +
+  labs(title = "Benford's Law vs Actual Apartment Numbers",
+       x = "Leading Digit", y = "Proportion") +
+  scale_fill_manual(values = c("gray70", "steelblue"))
+```
+
+The distribution of log-transformed apartment numbers shows multiple irregular peaks rather than a smooth right-skewed shape, suggesting that the data are not naturally occurring. Moreover, the leading-digit distribution deviates substantially from Benford’s Law, indicating that these apartment numbers are unlikely to represent real-world data. These findings are consistent with the dataset being synthetic or artificially generated.
