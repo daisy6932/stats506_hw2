@@ -1,5 +1,5 @@
 ---
-title: "Daixi Huang_stats506_hw3"
+title: "Daixi Huang_stats506_hw3 https://github.com/daisy6932/stats506_hw2"
 format: html
 editor: visual
 ---
@@ -208,6 +208,17 @@ microbenchmark(
 ```
 #(b)
 ```{r}
+
+library(DBI)
+library(dplyr)
+
+con <- dbConnect(RSQLite::SQLite(), "sakila_master.db")
+staff_df <- dbReadTable(con, "staff")
+country_df <- dbReadTable(con, "country")
+city_df <- dbReadTable(con, "city")
+address_df <- dbReadTable(con, "address")
+store_df <- dbReadTable(con, "store")
+
 staff_country <- staff_df %>%
   left_join(store_df, by = "store_id") %>%
   left_join(address_df, by = c("address_id.y" = "address_id")) %>%
