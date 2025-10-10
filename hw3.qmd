@@ -13,16 +13,17 @@ library(tidyr); library(broom); library(pscl); library(kableExtra)
 library(stargazer); library(sjlabelled); library(emmeans); library(car)
 library(ggplot2)
 
+options(dylyr.summarise.inform = FALSE)
 AUX_I <- read_xpt("AUX_I.XPT")
 DEMO_I <- read_xpt("DEMO_I.XPT")
 
-data <- read_xpt("AUX_I.XPT")
-data <- read_xpt("DEMO_I.XPT")
-#check variable names and documentation
-str(AUX_I)
-str(DEMO_I)
+aux<- read_xpt("AUX_I.XPT")
+demo <- read_xpt("DEMO_I.XPT")
+
 #merge
 merged <- inner_join(AUX_I, DEMO_I, by = "SEQN")
+dim(aux)
+dim(demo)
 dim(merged)
 ```
 
@@ -344,6 +345,7 @@ pct_com <- mean(australia$domain_suffix == "com") * 100
 pct_com
 
 ```
+There is 0% percentage of the websites are .com's.
 
 ```{r}
 #find the most common domain name amongst the email
