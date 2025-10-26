@@ -1,0 +1,356 @@
+---
+title: "HW3 DAIXI HUANG "
+format: html
+editor: visual
+---
+
+## 1
+
+```{r}
+# Install and load required packages
+library(nzelect)
+library(tidyverse)
+
+?nzge     # see documentation
+glimpse(nzge)
+```
+#(a) Total vote count per year and vote type
+```{r}
+nzge %>%
+  group_by(election_year, voting_type) %>%
+  summarize(total_votes = sum(votes, na.rm = TRUE)) %>%
+  arrange(desc(total_votes)) %>%
+  ungroup()
+```
+#(b) Focus on 2014 Candidate vote — proportion of votes per party
+```{r}
+nzge %>%
+  filter(election_year == 2014, voting_type == "Candidate") %>%
+  group_by(party) %>%
+  summarize(votes = sum(votes, na.rm = TRUE)) %>%
+  mutate(percent = 100 * votes / sum(votes)) %>%
+  arrange(desc(percent)) %>%
+  ungroup()
+```
+#(c) Find which party won Candidate and Party vote per year
+```{r}
+nzge %>%
+  group_by(election_year, voting_type, party) %>%
+  summarize(total_votes = sum(votes, na.rm = TRUE)) %>%
+  group_by(election_year, voting_type) %>%
+  slice_max(total_votes, n = 1, with_ties = FALSE) %>%
+  pivot_wider(
+    names_from = voting_type,
+    values_from = party,
+    names_prefix = "winner_"
+  ) %>%
+  arrange(election_year)
+
+
+```
+##2
+```{r}
+# Load packages
+library(tidyverse)
+
+# Load 2019 ATP matches data
+matches <- read_csv("https://raw.githubusercontent.com/JeffSackmann/tennis_atp/refs/heads/master/atp_matches_2019.csv")
+
+# Check structure
+glimpse(matches)
+```
+#(a)
+```{r}
+matches %>%
+  distinct(tourney_id, tourney_name) %>%
+  summarise(num_tournaments = n())
+```
+#(b)
+```{r}
+tournament_wins <- matches %>%
+  distinct(tourney_id, winner_name) %>%
+  group_by(winner_name) %>%
+  summarise(tournaments_won = n()) %>%
+  arrange(desc(tournaments_won))
+
+# Show those who won more than one tournament
+tournament_wins %>%
+  filter(tournaments_won > 1) %>%
+  summarise(
+    num_players_multi = n(),
+    max_tournaments = max(tournaments_won)
+  )
+```
+#(c)
+```{r}
+
+aces <- matches %>%
+  select(w_ace, l_ace) %>%
+  pivot_longer(everything(), names_to = "role", values_to = "aces") %>%
+  mutate(role = if_else(role == "w_ace", "Winner", "Loser"))
+
+# Compute summary statistics
+aces %>%
+  group_by(role) %>%
+  summarise(
+    mean_aces = mean(aces, na.rm = TRUE),
+    median_aces = median(aces, na.rm = TRUE),
+    n = sum(!is.na(aces))
+  )
+
+# Hypothesis test using tidyverse-compatible package
+library(infer)
+
+obs_stat <- aces %>%
+  specify(aces ~ role) %>%              
+  calculate(stat = "diff in means", order = c("Winner", "Loser")) %>%
+  pull(stat)
+
+obs_stat
+
+set.seed(2025) 
+null_dist <- aces %>%
+  specify(aces ~ role) %>%
+  hypothesize(null = "independence") %>%     
+  generate(reps = 5000, type = "permute") %>%
+  calculate(stat = "diff in means", order = c("Winner", "Loser"))
+
+
+p_value <- null_dist %>%
+  summarise(p = mean(stat >= obs_stat)) %>%
+  pull(p)
+
+p_value
+
+null_dist %>%
+  ggplot(aes(x = stat)) +
+  geom_histogram(bins = 60) +
+  geom_vline(xintercept = obs_stat, color = "red") +
+  labs(title = "Permutation null distribution: diff in means (Winner - Loser)",
+       subtitle = paste0("observed diff = ", round(obs_stat, 3), ", p = ", signif(p_value, 3)),
+       x = "Difference in means", y = "Count")
+
+```
+#(d)
+```{r}
+player_stats <- matches %>%
+  # count wins
+  count(winner_name, name = "wins") %>%
+  rename(player = winner_name) %>%
+  full_join(
+    matches %>%
+      count(loser_name, name = "losses") %>%
+      rename(player = loser_name),
+    by = "player"
+  ) %>%
+  replace_na(list(wins = 0, losses = 0)) %>%
+  mutate(
+    total_matches = wins + losses,
+    win_rate = wins / total_matches
+  )
+
+# Filter for players with ≥5 matches and sort by win rate
+player_stats %>%
+  filter(total_matches >= 5) %>%
+  arrange(desc(win_rate)) %>%
+  head(10)
+```
+##3
+```{r}
+# ---- Setup ----
+# Install packages if you don't have them (uncomment if needed)
+# install.packages(c("tidyverse", "scales", "lubridate", "pracma", "viridis"))
+
+library(tidyverse)
+library(lubridate)
+library(scales)
+library(pracma)   # for findpeaks()
+library(viridis)  # nice color palette
+
+# ---- 1. Load data ----
+url <- "https://raw.githubusercontent.com/nytimes/covid-19-data/refs/heads/master/rolling-averages/us-states.csv"
+df <- read_csv(url, col_types = cols())
+
+# Inspect
+glimpse(df)
+# Expect columns like: date, state, cases, cases_avg, cases_avg_per_100k, deaths, deaths_avg, deaths_avg_per_100k
+
+# ---- Prep ----
+df <- df %>%
+  mutate(date = ymd(date)) %>%
+  arrange(state, date)
+
+# National aggregate time series (use the provided US file or sum states)
+# some repos include 'us' file; if not, sum states to get US total:
+us_ts <- df %>%
+  group_by(date) %>%
+  summarise(
+    cases = sum(cases, na.rm = TRUE),
+    cases_avg = sum(cases_avg, na.rm = TRUE), # this sum is approximate for daily averages; prefer computing avg per 100k
+    population = NA_real_ # not used here; we will focus on absolute daily case rolling average
+  ) %>%
+  arrange(date)
+
+# Alternatively, use per-100k averages if available:
+# If df has cases_avg_per_100k at state level, compute population-weighted national per-100k:
+if ("cases_avg_per_100k" %in% names(df) & "cases_avg" %in% names(df)) {
+  # but if you don't have state population, simply compute total cases_avg_per_100k by summing numerators:
+  us_ts <- df %>%
+    group_by(date) %>%
+    summarise(cases_avg = sum(cases_avg, na.rm = TRUE)) %>% arrange(date)
+}
+
+# ---- Spike counting on national series ----
+# We'll smooth a bit (LOESS) and then find peaks on the smoothed series.
+us_ts <- us_ts %>%
+  mutate(cases_avg_smooth = stats::loess(cases_avg ~ as.numeric(date), data = .)$fitted)
+
+# find local peaks using pracma::findpeaks()
+# tune 'minpeakheight' and 'minpeakdistance' for what you consider "major" vs "minor"
+y <- us_ts$cases_avg_smooth
+# default: peaks with minimum distance 30 days to avoid counting minor wiggles
+peaks_info <- findpeaks(y,
+                        minpeakheight = quantile(y, 0.60, na.rm = TRUE),  # peaks above the 60th percentile -> candidate 'major' peaks
+                        minpeakdistance = 30)
+
+# peaks_info columns: peak height, index, left base, right base
+major_peak_idx <- if (!is.null(peaks_info)) peaks_info[,2] else integer(0)
+
+# Minor peaks: pick lower threshold (e.g., 30th percentile) but separate from major
+peaks_info_minor <- findpeaks(y,
+                              minpeakheight = quantile(y, 0.30, na.rm = TRUE),
+                              minpeakdistance = 14)
+minor_peak_idx <- setdiff(if (!is.null(peaks_info_minor)) peaks_info_minor[,2] else integer(0), major_peak_idx)
+
+# counts
+n_major <- length(major_peak_idx)
+n_minor <- length(minor_peak_idx)
+
+# ---- Plot 1: National timeline with peaks (publication ready) ----
+p1 <- ggplot(us_ts, aes(x = date, y = cases_avg_smooth)) +
+  geom_line(size = 0.8) +
+  geom_point(data = us_ts[major_peak_idx, ], aes(x = date, y = cases_avg_smooth), color = "#e41a1c", size = 2) +
+  geom_point(data = us_ts[minor_peak_idx, ], aes(x = date, y = cases_avg_smooth), color = "#377eb8", size = 1.5) +
+  annotate("text", x = us_ts$date[major_peak_idx], y = us_ts$cases_avg_smooth[major_peak_idx] * 1.08,
+           label = paste0("Peak ", seq_along(major_peak_idx)), color = "#e41a1c", size = 3, hjust = 0.5) +
+  labs(title = "US: Smoothed daily new cases (rolling average) — peaks highlighted",
+       subtitle = paste0("Major peaks (red): ", n_major, "; Minor peaks (blue): ", n_minor,
+                         ". Peaks defined by percentile thresholds — adjust thresholds to taste."),
+       x = "Date", y = "Smoothed daily new cases (rolling average)") +
+  scale_x_date(date_breaks = "3 months", date_labels = "%b %Y") +
+  theme_minimal(base_size = 14) +
+  theme(plot.title = element_text(face = "bold"),
+        axis.text.x = element_text(angle = 45, hjust = 1))
+
+# Save
+ggsave("plot1_us_peaks.png", p1, width = 10, height = 5, dpi = 300)
+
+# ---- Q: How many major and minor spikes were there? ----
+# We'll print the counts and the dates:
+major_peak_dates <- us_ts$date[major_peak_idx]
+minor_peak_dates <- us_ts$date[minor_peak_idx]
+
+message("Major peaks: ", n_major, " at dates: ", paste(major_peak_dates, collapse = ", "))
+message("Minor peaks: ", n_minor, " at dates: ", paste(head(minor_peak_dates, 10), collapse = ", "))
+
+# ---- Plot 2: Compare highest vs lowest overall rates per population ----
+# Determine states with highest and lowest overall rates per population across the period.
+# We'll compute each state's cumulative cases per 100k (or average cases_avg_per_100k).
+if ("cases_avg_per_100k" %in% names(df)) {
+  state_scores <- df %>%
+    group_by(state) %>%
+    summarise(avg_per100k = mean(cases_avg_per_100k, na.rm = TRUE),
+              max_per100k = max(cases_avg_per_100k, na.rm = TRUE)) %>%
+    arrange(desc(avg_per100k))
+} else {
+  # If no per-100k column, use total cases normalized by population if you have pop; otherwise use mean rolling avg
+  state_scores <- df %>%
+    group_by(state) %>%
+    summarise(mean_cases_avg = mean(cases_avg, na.rm = TRUE)) %>%
+    arrange(desc(mean_cases_avg))
+}
+
+top_state <- state_scores$state[1]
+bottom_state <- state_scores$state[nrow(state_scores)]
+
+# Prepare series for the two states
+cmp_df <- df %>%
+  filter(state %in% c(top_state, bottom_state)) %>%
+  select(date, state, cases_avg, cases_avg_per_100k) %>%
+  mutate(metric = ifelse("cases_avg_per_100k" %in% names(.), cases_avg_per_100k, cases_avg))
+
+# Plot overlayed trajectories per 100k
+p2 <- ggplot(cmp_df, aes(x = date, y = metric, color = state, group = state)) +
+  geom_line(size = 1.1) +
+  geom_smooth(method = "loess", se = FALSE, linetype = "dashed", size = 0.8) +
+  labs(title = paste0("Trajectories: ", top_state, " (highest) vs ", bottom_state, " (lowest)"),
+       subtitle = "Compare rolling average cases per 100k over time (dashed = loess trend)",
+       x = "Date", y = ifelse("cases_avg_per_100k" %in% names(df), "Cases (rolling avg) per 100k", "Cases (rolling avg)")) +
+  scale_x_date(date_breaks = "3 months", date_labels = "%b %Y") +
+  theme_minimal(base_size = 14) +
+  scale_color_viridis_d(end = 0.8) +
+  theme(legend.position = "bottom", axis.text.x = element_text(angle = 45, hjust = 1))
+
+ggsave("plot2_top_vs_bottom_states.png", p2, width = 10, height = 5, dpi = 300)
+
+# ---- Plot 3: First five states to experience COVID in a "substantial" way ----
+# Define "substantial": first date when rolling avg per 100k exceeds a threshold (e.g. 1 per 100k).
+threshold <- 1  # per 100k per day (adjust to be more/less strict)
+if ("cases_avg_per_100k" %in% names(df)) {
+  first_hit <- df %>%
+    group_by(state) %>%
+    filter(!is.na(cases_avg_per_100k)) %>%
+    arrange(date) %>%
+    filter(cases_avg_per_100k >= threshold) %>%
+    slice_head(n = 1) %>%
+    ungroup() %>%
+    arrange(date) %>%
+    mutate(first_date = date) %>%
+    select(state, first_date)
+} else {
+  # fallback: use cases_avg and a threshold relative to population (harder w/o pop)
+  first_hit <- df %>%
+    group_by(state) %>%
+    filter(!is.na(cases_avg)) %>%
+    arrange(date) %>%
+    filter(cases_avg >= 10) %>%  # absolute threshold
+    slice_head(n = 1) %>%
+    ungroup() %>%
+    arrange(date) %>%
+    mutate(first_date = date) %>%
+    select(state, first_date)
+}
+
+first_five_states <- first_hit %>% slice_head(n = 5)
+first_five_states
+
+# Plot their trajectories (cases_avg_per_100k if available)
+spi_states <- first_five_states$state
+
+plot3_df <- df %>%
+  filter(state %in% spi_states) %>%
+  mutate(metric = ifelse("cases_avg_per_100k" %in% names(.), cases_avg_per_100k, cases_avg))
+
+p3 <- ggplot(plot3_df, aes(x = date, y = metric, color = state)) +
+  geom_line(size = 1) +
+  geom_vline(data = first_five_states, aes(xintercept = as.numeric(first_date)), linetype = "dotted") +
+  labs(title = "First 5 states to reach substantial COVID activity",
+       subtitle = paste0("Threshold used: ", threshold,
+                         ifelse("cases_avg_per_100k" %in% names(df), " (cases_avg_per_100k)", " (cases_avg)")),
+       x = "Date", y = ifelse("cases_avg_per_100k" %in% names(df), "Cases avg per 100k", "Cases avg")) +
+  scale_x_date(date_breaks = "2 months", date_labels = "%b %Y") +
+  scale_color_viridis_d(option = "plasma", end = 0.9) +
+  theme_minimal(base_size = 13) +
+  theme(legend.position = "bottom", axis.text.x = element_text(angle = 45, hjust = 1))
+
+ggsave("plot3_first5_states.png", p3, width = 10, height = 6, dpi = 300)
+
+# ---- Print summary results to console ----
+cat("Summary:\n")
+cat("Major peaks found:", n_major, "\n")
+cat("Major peak dates (approx):", paste(major_peak_dates, collapse = ", "), "\n\n")
+
+cat("First five states to exceed threshold:\n")
+print(first_five_states)
+
+```
