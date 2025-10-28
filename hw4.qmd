@@ -1,5 +1,5 @@
 ---
-title: "HW3 DAIXI HUANG "
+title: "HW3 DAIXI HUANG https://github.com/daisy6932/stats506_hw2"
 format: html
 editor: visual
 ---
