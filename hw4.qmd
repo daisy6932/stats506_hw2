@@ -11,10 +11,11 @@ editor: visual
 library(nzelect)
 library(tidyverse)
 
-?nzge     # see documentation
 glimpse(nzge)
 ```
+
 #(a) Total vote count per year and vote type
+
 ```{r}
 nzge %>%
   group_by(election_year, voting_type) %>%
@@ -22,7 +23,9 @@ nzge %>%
   arrange(desc(total_votes)) %>%
   ungroup()
 ```
+
 #(b) Focus on 2014 Candidate vote — proportion of votes per party
+
 ```{r}
 nzge %>%
   filter(election_year == 2014, voting_type == "Candidate") %>%
@@ -32,7 +35,9 @@ nzge %>%
   arrange(desc(percent)) %>%
   ungroup()
 ```
+
 #(c) Find which party won Candidate and Party vote per year
+
 ```{r}
 nzge %>%
   group_by(election_year, voting_type, party) %>%
@@ -48,7 +53,9 @@ nzge %>%
 
 
 ```
+
 ##2
+
 ```{r}
 # Load packages
 library(tidyverse)
@@ -57,15 +64,21 @@ library(tidyverse)
 matches <- read_csv("https://raw.githubusercontent.com/JeffSackmann/tennis_atp/refs/heads/master/atp_matches_2019.csv")
 
 # Check structure
-glimpse(matches)
+#glimpse(matches)
 ```
+
 #(a)
+
 ```{r}
 matches %>%
   distinct(tourney_id, tourney_name) %>%
   summarise(num_tournaments = n())
 ```
+
+There were 128 tournaments in 2019.
+
 #(b)
+
 ```{r}
 tournament_wins <- matches %>%
   distinct(tourney_id, winner_name) %>%
@@ -81,7 +94,11 @@ tournament_wins %>%
     max_tournaments = max(tournaments_won)
   )
 ```
+
+155 players won more than one tournament, and the top players won 21 tournaments.
+
 #(c)
+
 ```{r}
 
 aces <- matches %>%
@@ -131,7 +148,15 @@ null_dist %>%
        x = "Difference in means", y = "Count")
 
 ```
+
+From the summary statistics, winners averaged 7.50 aces per match (median = 6), while losers averaged 5.79 aces per match (median = 4). Both groups had data from 2,694 observations.
+
+The permutation test (with 5,000 replicates) produced an observed difference in means of 1.705 aces (Winner − Loser) and a p-value ≈ 0. This indicates that, under the null hypothesis of no difference in average aces between winners and losers, it is extremely unlikely to observe such a large difference by random chance.
+
+Therefore, we reject the null hypothesis and conclude that there is strong statistical evidence that match winners serve significantly more aces than losers in the 2019 ATP data.
+
 #(d)
+
 ```{r}
 player_stats <- matches %>%
   # count wins
@@ -155,7 +180,11 @@ player_stats %>%
   arrange(desc(win_rate)) %>%
   head(10)
 ```
+
+Among players with \>= matches, Rafael Nadal had the highest win rate.
+
 ##3
+
 ```{r}
 # ---- Setup ----
 # Install packages if you don't have them (uncomment if needed)
@@ -165,6 +194,7 @@ library(tidyverse)
 library(lubridate)
 library(scales)
 library(pracma)   # for findpeaks()
+library(ggrepel)     # nicer labels on plots
 library(viridis)  # nice color palette
 
 # ---- 1. Load data ----
@@ -175,182 +205,158 @@ df <- read_csv(url, col_types = cols())
 glimpse(df)
 # Expect columns like: date, state, cases, cases_avg, cases_avg_per_100k, deaths, deaths_avg, deaths_avg_per_100k
 
-# ---- Prep ----
-df <- df %>%
-  mutate(date = ymd(date)) %>%
-  arrange(state, date)
+states <- read_csv(url,
+                   col_types = cols(
+                     date = col_date(format = ""),
+                     geoid = col_character(),
+                     state = col_character(),
+                     cases = col_double(),
+                     cases_avg = col_double(),
+                     cases_avg_per_100k = col_double(),
+                     deaths = col_double(),
+                     deaths_avg = col_double(),
+                     deaths_avg_per_100k = col_double()
+                   ))
 
-# National aggregate time series (use the provided US file or sum states)
-# some repos include 'us' file; if not, sum states to get US total:
-us_ts <- df %>%
+```
+
+```{r}
+# helper: detect local maxima (simple approach)
+is_local_peak <- function(x, span = 7) {
+  # returns logical vector same length as x indicating local maxima within +/- floor(span/2)
+  n <- length(x)
+  s <- floor(span/2)
+  map_lgl(seq_along(x), ~{
+    i <- .x
+    if (is.na(x[i])) return(FALSE)
+    left <- max(1, i - s)
+    right <- min(n, i + s)
+    all(x[i] >= x[left:right], na.rm = TRUE) && any(x[i] > x[left:right], na.rm = TRUE)
+  })
+}
+
+# find peaks per state
+peaks <- states %>%
+  arrange(state, date) %>%
+  group_by(state) %>%
+  mutate(is_peak = is_local_peak(cases_avg_per_100k, span = 15)) %>%  # span tuned for ~2-week window
+  filter(is_peak) %>%
+  ungroup()
+
+# classify peak sizes across all peaks
+peak_thresholds <- quantile(peaks$cases_avg_per_100k, probs = c(0.60, 0.90), na.rm = TRUE)
+peaks <- peaks %>%
+  mutate(size = case_when(
+    cases_avg_per_100k >= peak_thresholds[2] ~ "major",
+    cases_avg_per_100k >= peak_thresholds[1] ~ "minor",
+    TRUE ~ "small"
+  ))
+
+# summary counts (how many major/minor peaks total across all states)
+peaks_summary <- peaks %>%
+  count(size) %>%
+  arrange(desc(n))
+
+# plot: US median trajectory + vertical rugs at aggregated major/minor peak dates
+us_median <- states %>%
   group_by(date) %>%
-  summarise(
-    cases = sum(cases, na.rm = TRUE),
-    cases_avg = sum(cases_avg, na.rm = TRUE), # this sum is approximate for daily averages; prefer computing avg per 100k
-    population = NA_real_ # not used here; we will focus on absolute daily case rolling average
-  ) %>%
-  arrange(date)
+  summarize(median_cases_per_100k = median(cases_avg_per_100k, na.rm = TRUE),
+            p90 = quantile(cases_avg_per_100k, 0.90, na.rm = TRUE),
+            p10 = quantile(cases_avg_per_100k, 0.10, na.rm = TRUE)) %>%
+  ungroup()
 
-# Alternatively, use per-100k averages if available:
-# If df has cases_avg_per_100k at state level, compute population-weighted national per-100k:
-if ("cases_avg_per_100k" %in% names(df) & "cases_avg" %in% names(df)) {
-  # but if you don't have state population, simply compute total cases_avg_per_100k by summing numerators:
-  us_ts <- df %>%
-    group_by(date) %>%
-    summarise(cases_avg = sum(cases_avg, na.rm = TRUE)) %>% arrange(date)
-}
+agg_peaks <- peaks %>%
+  group_by(date, size) %>%
+  summarize(n_states = n(), .groups = "drop")
 
-# ---- Spike counting on national series ----
-# We'll smooth a bit (LOESS) and then find peaks on the smoothed series.
-us_ts <- us_ts %>%
-  mutate(cases_avg_smooth = stats::loess(cases_avg ~ as.numeric(date), data = .)$fitted)
-
-# find local peaks using pracma::findpeaks()
-# tune 'minpeakheight' and 'minpeakdistance' for what you consider "major" vs "minor"
-y <- us_ts$cases_avg_smooth
-# default: peaks with minimum distance 30 days to avoid counting minor wiggles
-peaks_info <- findpeaks(y,
-                        minpeakheight = quantile(y, 0.60, na.rm = TRUE),  # peaks above the 60th percentile -> candidate 'major' peaks
-                        minpeakdistance = 30)
-
-# peaks_info columns: peak height, index, left base, right base
-major_peak_idx <- if (!is.null(peaks_info)) peaks_info[,2] else integer(0)
-
-# Minor peaks: pick lower threshold (e.g., 30th percentile) but separate from major
-peaks_info_minor <- findpeaks(y,
-                              minpeakheight = quantile(y, 0.30, na.rm = TRUE),
-                              minpeakdistance = 14)
-minor_peak_idx <- setdiff(if (!is.null(peaks_info_minor)) peaks_info_minor[,2] else integer(0), major_peak_idx)
-
-# counts
-n_major <- length(major_peak_idx)
-n_minor <- length(minor_peak_idx)
-
-# ---- Plot 1: National timeline with peaks (publication ready) ----
-p1 <- ggplot(us_ts, aes(x = date, y = cases_avg_smooth)) +
-  geom_line(size = 0.8) +
-  geom_point(data = us_ts[major_peak_idx, ], aes(x = date, y = cases_avg_smooth), color = "#e41a1c", size = 2) +
-  geom_point(data = us_ts[minor_peak_idx, ], aes(x = date, y = cases_avg_smooth), color = "#377eb8", size = 1.5) +
-  annotate("text", x = us_ts$date[major_peak_idx], y = us_ts$cases_avg_smooth[major_peak_idx] * 1.08,
-           label = paste0("Peak ", seq_along(major_peak_idx)), color = "#e41a1c", size = 3, hjust = 0.5) +
-  labs(title = "US: Smoothed daily new cases (rolling average) — peaks highlighted",
-       subtitle = paste0("Major peaks (red): ", n_major, "; Minor peaks (blue): ", n_minor,
-                         ". Peaks defined by percentile thresholds — adjust thresholds to taste."),
-       x = "Date", y = "Smoothed daily new cases (rolling average)") +
-  scale_x_date(date_breaks = "3 months", date_labels = "%b %Y") +
-  theme_minimal(base_size = 14) +
-  theme(plot.title = element_text(face = "bold"),
-        axis.text.x = element_text(angle = 45, hjust = 1))
-
-# Save
-ggsave("plot1_us_peaks.png", p1, width = 10, height = 5, dpi = 300)
-
-# ---- Q: How many major and minor spikes were there? ----
-# We'll print the counts and the dates:
-major_peak_dates <- us_ts$date[major_peak_idx]
-minor_peak_dates <- us_ts$date[minor_peak_idx]
-
-message("Major peaks: ", n_major, " at dates: ", paste(major_peak_dates, collapse = ", "))
-message("Minor peaks: ", n_minor, " at dates: ", paste(head(minor_peak_dates, 10), collapse = ", "))
-
-# ---- Plot 2: Compare highest vs lowest overall rates per population ----
-# Determine states with highest and lowest overall rates per population across the period.
-# We'll compute each state's cumulative cases per 100k (or average cases_avg_per_100k).
-if ("cases_avg_per_100k" %in% names(df)) {
-  state_scores <- df %>%
-    group_by(state) %>%
-    summarise(avg_per100k = mean(cases_avg_per_100k, na.rm = TRUE),
-              max_per100k = max(cases_avg_per_100k, na.rm = TRUE)) %>%
-    arrange(desc(avg_per100k))
-} else {
-  # If no per-100k column, use total cases normalized by population if you have pop; otherwise use mean rolling avg
-  state_scores <- df %>%
-    group_by(state) %>%
-    summarise(mean_cases_avg = mean(cases_avg, na.rm = TRUE)) %>%
-    arrange(desc(mean_cases_avg))
-}
-
-top_state <- state_scores$state[1]
-bottom_state <- state_scores$state[nrow(state_scores)]
-
-# Prepare series for the two states
-cmp_df <- df %>%
-  filter(state %in% c(top_state, bottom_state)) %>%
-  select(date, state, cases_avg, cases_avg_per_100k) %>%
-  mutate(metric = ifelse("cases_avg_per_100k" %in% names(.), cases_avg_per_100k, cases_avg))
-
-# Plot overlayed trajectories per 100k
-p2 <- ggplot(cmp_df, aes(x = date, y = metric, color = state, group = state)) +
-  geom_line(size = 1.1) +
-  geom_smooth(method = "loess", se = FALSE, linetype = "dashed", size = 0.8) +
-  labs(title = paste0("Trajectories: ", top_state, " (highest) vs ", bottom_state, " (lowest)"),
-       subtitle = "Compare rolling average cases per 100k over time (dashed = loess trend)",
-       x = "Date", y = ifelse("cases_avg_per_100k" %in% names(df), "Cases (rolling avg) per 100k", "Cases (rolling avg)")) +
-  scale_x_date(date_breaks = "3 months", date_labels = "%b %Y") +
-  theme_minimal(base_size = 14) +
-  scale_color_viridis_d(end = 0.8) +
-  theme(legend.position = "bottom", axis.text.x = element_text(angle = 45, hjust = 1))
-
-ggsave("plot2_top_vs_bottom_states.png", p2, width = 10, height = 5, dpi = 300)
-
-# ---- Plot 3: First five states to experience COVID in a "substantial" way ----
-# Define "substantial": first date when rolling avg per 100k exceeds a threshold (e.g. 1 per 100k).
-threshold <- 1  # per 100k per day (adjust to be more/less strict)
-if ("cases_avg_per_100k" %in% names(df)) {
-  first_hit <- df %>%
-    group_by(state) %>%
-    filter(!is.na(cases_avg_per_100k)) %>%
-    arrange(date) %>%
-    filter(cases_avg_per_100k >= threshold) %>%
-    slice_head(n = 1) %>%
-    ungroup() %>%
-    arrange(date) %>%
-    mutate(first_date = date) %>%
-    select(state, first_date)
-} else {
-  # fallback: use cases_avg and a threshold relative to population (harder w/o pop)
-  first_hit <- df %>%
-    group_by(state) %>%
-    filter(!is.na(cases_avg)) %>%
-    arrange(date) %>%
-    filter(cases_avg >= 10) %>%  # absolute threshold
-    slice_head(n = 1) %>%
-    ungroup() %>%
-    arrange(date) %>%
-    mutate(first_date = date) %>%
-    select(state, first_date)
-}
-
-first_five_states <- first_hit %>% slice_head(n = 5)
-first_five_states
-
-# Plot their trajectories (cases_avg_per_100k if available)
-spi_states <- first_five_states$state
-
-plot3_df <- df %>%
-  filter(state %in% spi_states) %>%
-  mutate(metric = ifelse("cases_avg_per_100k" %in% names(.), cases_avg_per_100k, cases_avg))
-
-p3 <- ggplot(plot3_df, aes(x = date, y = metric, color = state)) +
+p1 <- ggplot(us_median, aes(x = date, y = median_cases_per_100k)) +
+  geom_ribbon(aes(ymin = p10, ymax = p90), alpha = 0.15) +
   geom_line(size = 1) +
-  geom_vline(data = first_five_states, aes(xintercept = as.numeric(first_date)), linetype = "dotted") +
-  labs(title = "First 5 states to reach substantial COVID activity",
-       subtitle = paste0("Threshold used: ", threshold,
-                         ifelse("cases_avg_per_100k" %in% names(df), " (cases_avg_per_100k)", " (cases_avg)")),
-       x = "Date", y = ifelse("cases_avg_per_100k" %in% names(df), "Cases avg per 100k", "Cases avg")) +
-  scale_x_date(date_breaks = "2 months", date_labels = "%b %Y") +
-  scale_color_viridis_d(option = "plasma", end = 0.9) +
-  theme_minimal(base_size = 13) +
-  theme(legend.position = "bottom", axis.text.x = element_text(angle = 45, hjust = 1))
+  geom_segment(data = agg_peaks %>% filter(size == "major"),
+               aes(x = date, xend = date, y = 0, yend = 0.9 * max(us_median$median_cases_per_100k, na.rm = TRUE)),
+               color = "red", alpha = 0.6) +
+  geom_segment(data = agg_peaks %>% filter(size == "minor"),
+               aes(x = date, xend = date, y = 0, yend = 0.55 * max(us_median$median_cases_per_100k, na.rm = TRUE)),
+               color = "orange", alpha = 0.5) +
+  scale_y_continuous(name = "Median 7-day avg cases per 100k",
+                     labels = scales::label_number(accuracy = 0.1)) +
+  labs(title = "US median trajectory of 7-day avg cases per 100k with aggregated peaks",
+       subtitle = "Red vertical lines = aggregated 'major' peaks (top 10% of peak heights across states); orange = 'minor' peaks",
+       x = NULL, caption = "Data: NYTimes rolling-averages (states).") +
+  theme_minimal()
 
-ggsave("plot3_first5_states.png", p3, width = 10, height = 6, dpi = 300)
+p1
+```
 
-# ---- Print summary results to console ----
-cat("Summary:\n")
-cat("Major peaks found:", n_major, "\n")
-cat("Major peak dates (approx):", paste(major_peak_dates, collapse = ", "), "\n\n")
+The plot shows the national median 7-day average of new Covid cases per 100,000 residents from 2020 through 2023. The orange and red vertical lines mark local peaks detected across all states, with red indicating the “major” spikes (the top 10% of peak magnitudes).
 
-cat("First five states to exceed threshold:\n")
-print(first_five_states)
+From the plot, we can identify approximately five major waves of Covid in the United States:
 
+The initial outbreak in early 2020,
+
+The winter 2020–2021 surge,
+
+The Delta wave (mid-2021),
+
+The Omicron wave (late 2021–early 2022), and
+
+A smaller rebound in mid-2022.
+
+Minor spikes occur frequently in between, reflecting regional resurgences. The aggregated national trajectory captures both the recurring pattern of resurgence and the overall downward trend in late 2022–2023.
+
+```{r}
+state_summary <- states %>%
+  group_by(state) %>%
+  summarize(mean_rate = mean(cases_avg_per_100k, na.rm = TRUE),
+            max_rate = max(cases_avg_per_100k, na.rm = TRUE),
+            .groups = "drop")
+
+top_states <- state_summary %>% slice_max(mean_rate, n = 3) %>% pull(state)
+bottom_states <- state_summary %>% slice_min(mean_rate, n = 3) %>% pull(state)
+sel_states <- c(top_states, bottom_states)
+
+p2 <- states %>%
+  filter(state %in% sel_states) %>%
+  ggplot(aes(x = date, y = cases_avg_per_100k, color = state)) +
+  geom_line(size = 1) +
+  facet_wrap(~ state, ncol = 2, scales = "free_y") +   # free_y helps see shapes even if magnitudes differ
+  labs(title = "Trajectories of 7-day avg cases per 100k in highest vs lowest rate states",
+       subtitle = paste("Top:", paste(top_states, collapse = ", "), 
+                        " | Bottom:", paste(bottom_states, collapse = ", ")),
+       y = "7-day avg cases per 100k", x = NULL,
+       caption = "Top/bottom determined by mean 7-day avg per 100k across full period.") +
+  theme_minimal() +
+  theme(legend.position = "none")
+
+p2
+
+```
+
+The figure compares states with the highest mean case rates (American Samoa, Rhode Island, Alaska) and those with the lowest (Maryland, Maine, Oregon).
+
+High-rate states show sharp, tall peaks with brief but intense outbreaks. For instance, Rhode Island and American Samoa experienced extreme but short-lived spikes.
+
+Low-rate states display flatter trajectories, indicating steadier case control or smaller population outbreaks.
+
+This contrast suggests that the epidemic intensity varied dramatically by region—possibly reflecting differences in population density, testing availability, and containment policies.
+
+```{r}
+threshold <- 0.5 # daily 7-day avg per 100k; adjust if you prefer stricter definition
+
+first_substantial <- states %>%
+  arrange(state, date) %>%
+  group_by(state) %>%
+  mutate(above = cases_avg_per_100k >= threshold,
+         # run-length encoding trick: find runs of > = threshold
+         run_id = rle_id <- with(rle(above), rep(seq_along(lengths), lengths))) %>%
+  group_by(state, run_id) %>%
+  mutate(run_length = n()) %>%
+  ungroup() %>%
+  filter(above & run_length >= 3) %>%   # sustained at least 3 consecutive days
+  group_by(state) %>%
+  summarize(first_date = min(date, na.rm = TRUE), .groups = "drop") %>%
+  arrange(first_date) %>%
+  slice_head(n = 5)
+
+first_substantial
 ```
