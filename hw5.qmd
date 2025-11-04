@@ -1,0 +1,277 @@
+---
+title: "hw5 Daixi Huang https://github.com/daisy6932/stats506_hw2"
+format: html
+editor: visual
+---
+
+## 1
+# a
+```{r}
+
+### =======================================================
+### Define S4 Class: waldCI
+### =======================================================
+
+setClass("waldCI",
+         slots = list(mean = "numeric",
+                      sterr = "numeric"),
+         prototype = list(mean = NA_real_, sterr = NA_real_),
+         validity = function(object) {
+           if (any(!is.finite(object@mean))) return("mean must be finite")
+           if (any(!is.finite(object@sterr))) return("standard error must be finite")
+           if (object@sterr <= 0) return("standard error must be positive")
+           TRUE
+         })
+
+
+### =======================================================
+### Constructor
+### =======================================================
+
+waldCI_create <- function(mean = NULL, sterr = NULL,
+                          lb = NULL, ub = NULL, level = 0.95) {
+  if (!is.null(mean) && !is.null(sterr)) {
+    return(new("waldCI", mean = mean, sterr = sterr))
+  } else if (!is.null(lb) && !is.null(ub)) {
+    if (!is.finite(lb) || !is.finite(ub)) stop("Bounds must be finite")
+    if (lb > ub) stop("Lower bound cannot exceed upper bound")
+    z <- qnorm(1 - (1 - level) / 2)
+    m <- (lb + ub) / 2
+    s <- (ub - lb) / (2 * z)
+    return(new("waldCI", mean = m, sterr = s))
+  } else {
+    stop("Must supply either mean & sterr or lb & ub")
+  }
+}
+
+
+### =======================================================
+### Accessors
+### =======================================================
+
+setGeneric("lb", function(object, level = 0.95) standardGeneric("lb"))
+setMethod("lb", "waldCI", function(object, level = 0.95) {
+  z <- qnorm(1 - (1 - level) / 2)
+  object@mean - z * object@sterr
+})
+
+setGeneric("ub", function(object, level = 0.95) standardGeneric("ub"))
+setMethod("ub", "waldCI", function(object, level = 0.95) {
+  z <- qnorm(1 - (1 - level) / 2)
+  object@mean + z * object@sterr
+})
+
+setGeneric("mean", function(x) standardGeneric("mean"))
+setMethod("mean", "waldCI", function(x) x@mean)
+
+setGeneric("sterr", function(object) standardGeneric("sterr"))
+setMethod("sterr", "waldCI", function(object) object@sterr)
+
+
+### =======================================================
+### Setters
+### =======================================================
+
+setReplaceMethod("mean", "waldCI", function(x, value) {
+  new("waldCI", mean = value, sterr = x@sterr)
+})
+
+setReplaceMethod("sterr", "waldCI", function(x, value) {
+  if (value <= 0) stop("Standard error must be positive")
+  new("waldCI", mean = x@mean, sterr = value)
+})
+
+
+setReplaceMethod("ub", "waldCI", function(x, level = 0.95, value) {
+  z <- qnorm(1 - (1 - level) / 2)
+  lbv <- lb(x, level)
+  new_mean <- (lbv + value) / 2
+  new_sterr <- (value - lbv) / (2 * z)
+  new("waldCI", mean = new_mean, sterr = new_sterr)
+})
+
+
+setReplaceMethod("ub", "waldCI", function(x, level = 0.95, value) {
+  z <- qnorm(1 - (1 - level) / 2)
+  lbv <- lb(x, level)
+  new_mean <- (lbv + value) / 2
+  new_sterr <- (value - lbv) / (2 * z)
+  new("waldCI", mean = new_mean, sterr = new_sterr)
+})
+
+
+### =======================================================
+### Contains: test if value within CI
+### =======================================================
+
+setGeneric("contains", function(object, value, level = 0.95) standardGeneric("contains"))
+setMethod("contains", "waldCI", function(object, value, level = 0.95) {
+  (value >= lb(object, level)) && (value <= ub(object, level))
+})
+
+
+### =======================================================
+### Overlap: test if two CIs overlap
+### =======================================================
+
+setGeneric("overlap", function(x, y, level = 0.95) standardGeneric("overlap"))
+setMethod("overlap", c("waldCI", "waldCI"), function(x, y, level = 0.95) {
+  max(lb(x, level), lb(y, level)) <= min(ub(x, level), ub(y, level))
+})
+
+
+### =======================================================
+### as.numeric: return [lb, ub]
+### =======================================================
+
+setMethod("as.numeric", "waldCI", function(x, level = 0.95) {
+  c(lb(x, level), ub(x, level))
+})
+
+
+### =======================================================
+### Show (flexible)
+### =======================================================
+
+if (isGeneric("show")) removeGeneric("show")
+setGeneric("show", function(object, ...) standardGeneric("show"))
+setMethod("show", "waldCI", function(object, level = 0.95, digits = 3, ...) {
+  cat("Wald Confidence Interval (", level * 100, "%)\n", sep = "")
+  cat("Mean: ", round(object@mean, digits), "\n", sep = "")
+  cat("SE: ", round(object@sterr, digits), "\n", sep = "")
+  cat("CI: [", round(lb(object, level), digits), ", ",
+      round(ub(object, level), digits), "]\n", sep = "")
+})
+
+
+### =======================================================
+### Transform (monotonic function)
+### =======================================================
+
+if (isGeneric("transform")) removeGeneric("transform")
+setGeneric("transform", function(x, f) standardGeneric("transform"))
+setMethod("transform", c("waldCI", "function"), function(x, f) {
+  test_vals <- c(x@mean - 1, x@mean + 1)
+  if (sign(diff(f(test_vals))) <= 0)
+    stop("function must be monotonic increasing")
+  lower_t <- f(lb(x))
+  upper_t <- f(ub(x))
+  if (lower_t > upper_t) {
+    tmp <- lower_t; lower_t <- upper_t; upper_t <- tmp
+  }
+  waldCI_create(lb = lower_t, ub = upper_t)
+})
+
+
+### =======================================================
+### Create Test Objects
+### =======================================================
+
+ci1 <- waldCI_create(lb = 17.2, ub = 24.7, level = 0.95)
+ci2 <- waldCI_create(mean = 13, sterr = 2.5)
+ci3 <- waldCI_create(lb = 27.43, ub = 39.22, level = 0.75)
+```
+# b
+```{r}
+
+### =======================================================
+### Test Code (as provided)
+### =======================================================
+
+ci1
+ci2
+ci3
+as.numeric(ci1)
+as.numeric(ci2, .8)
+as.numeric(ci3)
+show(ci1, .9)
+show(ci2, .8)
+show(ci3, .75)
+lb(ci2)
+ub(ci2, .99)
+mean(ci1)
+sterr(ci3)
+lb(ci2) <- 10.5
+lb(ci2, .9) <- 10
+mean(ci3) <- 34
+contains(ci1, 17)
+contains(ci2, 11, .9)
+contains(ci3, 44)
+overlap(ci1, ci2)
+overlap(ci1, ci2, .99)
+eci1 <- transform(ci1, exp)
+eci1
+show(eci1, .75)
+mean(transform(ci2, sqrt))
+
+
+
+```
+
+# c
+```{r}
+### --- Validator demonstration for class "waldCI" ---
+
+cat("1️⃣  Negative standard error test:\n")
+try({
+  waldCI(mean = 10, sterr = -3)
+})
+
+cat("\n2️⃣  Lower bound greater than upper bound test:\n")
+try({
+  waldCI(lb = 12, ub = 8, level = 0.95)
+})
+
+cat("\n3️⃣  Infinite values test (mean = Inf):\n")
+try({
+  waldCI(mean = Inf, sterr = 1)
+})
+
+cat("\n3️⃣  Infinite values test (sterr = Inf):\n")
+try({
+  waldCI(mean = 10, sterr = Inf)
+})
+
+cat("\n4️⃣  Invalid use of setter (negative sterr):\n")
+try({
+  ci <- waldCI(mean = 10, sterr = 2)
+  sterr(ci) <- -5
+})
+
+cat("\n5️⃣  Invalid use of setter (lb > ub):\n")
+try({
+  ci <- waldCI(mean = 10, sterr = 2)
+  lb(ci) <- 20
+})
+
+```
+1️⃣ Negative standard error test
+The validator correctly rejects creation of a waldCI object 
+when the standard error is negative, since SE must be positive.
+→ Error: "standard error must be positive"
+
+2️⃣ Lower bound greater than upper bound test
+When lb > ub, the constructor immediately throws an error,
+preventing invalid confidence intervals.
+→ Error: "lower bound must be less than upper bound"
+
+3️⃣ Infinite values (mean = Inf)
+The validator ensures that the mean must be finite.
+Any attempt to create an object with infinite mean fails.
+→ Error: "mean must be finite"
+
+3️⃣ Infinite values (sterr = Inf)
+Similarly, the standard error must be finite. Infinite SE is invalid.
+→ Error: "standard error must be finite"
+
+4️⃣ Invalid use of setter (negative sterr)
+Even after an object is created correctly, the replacement method 
+disallows setting the standard error to a negative value.
+→ Error: "Standard error must be positive"
+
+5️⃣ Invalid use of setter (lb > ub)
+The lower bound replacement method checks that lb < ub.
+Attempting to set a lower bound greater than the upper bound fails.
+→ Error: "lower bound must be less than upper bound"
+
+## 2

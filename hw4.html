@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>HW3 DAIXI HUANG https://github.com/daisy6932/stats506_hw2</title>
+<title>HW4 DAIXI HUANG https://github.com/daisy6932/stats506_hw2</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -81,7 +81,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">HW3 DAIXI HUANG https://github.com/daisy6932/stats506_hw2</h1>
+<h1 class="title">HW4 DAIXI HUANG https://github.com/daisy6932/stats506_hw2</h1>
 </div>
 
 
@@ -236,13 +236,66 @@ i Use `spec()` to retrieve the full column specification for this data.
 i Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check structure</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="co">#glimpse(matches)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(matches)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 2,806
+Columns: 49
+$ tourney_id         &lt;chr&gt; "2019-M020", "2019-M020", "2019-M020", "2019-M020",~
+$ tourney_name       &lt;chr&gt; "Brisbane", "Brisbane", "Brisbane", "Brisbane", "Br~
+$ surface            &lt;chr&gt; "Hard", "Hard", "Hard", "Hard", "Hard", "Hard", "Ha~
+$ draw_size          &lt;dbl&gt; 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32,~
+$ tourney_level      &lt;chr&gt; "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "~
+$ tourney_date       &lt;dbl&gt; 20181231, 20181231, 20181231, 20181231, 20181231, 2~
+$ match_num          &lt;dbl&gt; 300, 299, 298, 297, 296, 295, 294, 293, 292, 291, 2~
+$ winner_id          &lt;dbl&gt; 105453, 106421, 105453, 104542, 106421, 104871, 105~
+$ winner_seed        &lt;dbl&gt; 2, 4, 2, NA, 4, NA, 2, NA, 7, 4, 5, NA, NA, 6, 2, N~
+$ winner_entry       &lt;chr&gt; NA, NA, NA, "PR", NA, NA, NA, "PR", NA, NA, NA, NA,~
+$ winner_name        &lt;chr&gt; "Kei Nishikori", "Daniil Medvedev", "Kei Nishikori"~
+$ winner_hand        &lt;chr&gt; "R", "R", "R", "R", "R", "R", "R", "R", "R", "R", "~
+$ winner_ht          &lt;dbl&gt; 178, 198, 178, 188, 198, 188, 178, 188, 183, 198, 1~
+$ winner_ioc         &lt;chr&gt; "JPN", "RUS", "JPN", "FRA", "RUS", "FRA", "JPN", "F~
+$ winner_age         &lt;dbl&gt; 29.0, 22.8, 29.0, 33.7, 22.8, 31.8, 29.0, 33.7, 19.~
+$ loser_id           &lt;dbl&gt; 106421, 104542, 104871, 200282, 105683, 106034, 105~
+$ loser_seed         &lt;dbl&gt; 4, NA, NA, 7, 5, NA, 6, NA, NA, NA, NA, 8, 3, NA, N~
+$ loser_entry        &lt;chr&gt; NA, "PR", NA, NA, NA, "Q", NA, "LL", NA, "PR", "Q",~
+$ loser_name         &lt;chr&gt; "Daniil Medvedev", "Jo-Wilfried Tsonga", "Jeremy Ch~
+$ loser_hand         &lt;chr&gt; "R", "R", "R", "R", "R", "R", "R", "R", "R", "R", "~
+$ loser_ht           &lt;dbl&gt; 198, 188, 188, 183, 196, 183, 191, 191, 183, 191, 1~
+$ loser_ioc          &lt;chr&gt; "RUS", "FRA", "FRA", "AUS", "CAN", "JPN", "BUL", "J~
+$ loser_age          &lt;dbl&gt; 22.8, 33.7, 31.8, 19.8, 28.0, 26.4, 27.6, 25.9, 24.~
+$ score              &lt;chr&gt; "6-4 3-6 6-2", "7-6(6) 6-2", "6-2 6-2", "6-4 7-6(2)~
+$ best_of            &lt;dbl&gt; 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, ~
+$ round              &lt;chr&gt; "F", "SF", "SF", "QF", "QF", "QF", "QF", "R16", "R1~
+$ minutes            &lt;dbl&gt; 124, 82, 66, 106, 129, 127, 100, 100, 80, 81, 82, 9~
+$ w_ace              &lt;dbl&gt; 3, 10, 2, 12, 12, 10, 5, 11, 1, 16, 21, 17, 15, 6, ~
+$ w_df               &lt;dbl&gt; 3, 1, 2, 2, 3, 8, 2, 3, 1, 2, 3, 5, 0, 2, 2, 1, 2, ~
+$ w_svpt             &lt;dbl&gt; 77, 52, 47, 68, 105, 94, 59, 64, 49, 54, 62, 84, 75~
+$ w_1stIn            &lt;dbl&gt; 44, 33, 33, 43, 68, 58, 47, 37, 38, 34, 46, 58, 48,~
+$ w_1stWon           &lt;dbl&gt; 31, 28, 26, 34, 48, 44, 37, 30, 29, 27, 40, 50, 41,~
+$ w_2ndWon           &lt;dbl&gt; 17, 14, 9, 15, 25, 18, 9, 11, 8, 13, 10, 17, 14, 13~
+$ w_SvGms            &lt;dbl&gt; 13, 10, 8, 11, 16, 16, 12, 10, 9, 10, 11, 15, 11, 1~
+$ w_bpSaved          &lt;dbl&gt; 3, 0, 2, 4, 8, 4, 0, 4, 0, 0, 0, 2, 3, 2, 0, 2, 0, ~
+$ w_bpFaced          &lt;dbl&gt; 6, 1, 2, 5, 8, 8, 1, 7, 0, 1, 0, 2, 3, 4, 0, 3, 1, ~
+$ l_ace              &lt;dbl&gt; 8, 17, 10, 1, 29, 12, 8, 3, 5, 6, 3, 13, 7, 1, 5, 3~
+$ l_df               &lt;dbl&gt; 6, 2, 3, 2, 5, 6, 5, 7, 0, 1, 0, 6, 1, 1, 3, 0, 3, ~
+$ l_svpt             &lt;dbl&gt; 100, 77, 46, 81, 94, 90, 80, 85, 56, 60, 71, 80, 75~
+$ l_1stIn            &lt;dbl&gt; 54, 52, 27, 60, 56, 54, 53, 51, 39, 39, 44, 59, 50,~
+$ l_1stWon           &lt;dbl&gt; 34, 36, 15, 38, 46, 40, 37, 34, 30, 27, 28, 48, 35,~
+$ l_2ndWon           &lt;dbl&gt; 20, 7, 6, 9, 19, 18, 13, 11, 3, 7, 18, 10, 14, 10, ~
+$ l_SvGms            &lt;dbl&gt; 14, 10, 8, 11, 15, 15, 12, 11, 9, 10, 10, 14, 11, 9~
+$ l_bpSaved          &lt;dbl&gt; 10, 10, 1, 4, 2, 6, 6, 6, 3, 2, 2, 2, 1, 3, 4, 1, 8~
+$ l_bpFaced          &lt;dbl&gt; 15, 13, 5, 6, 4, 9, 9, 11, 6, 6, 3, 5, 2, 7, 7, 3, ~
+$ winner_rank        &lt;dbl&gt; 9, 16, 9, 239, 16, 40, 9, 239, 31, 16, 18, 40, 185,~
+$ winner_rank_points &lt;dbl&gt; 3590, 1977, 3590, 200, 1977, 1050, 3590, 200, 1298,~
+$ loser_rank         &lt;dbl&gt; 16, 239, 40, 31, 18, 185, 19, 77, 72, 240, 131, 35,~
+$ loser_rank_points  &lt;dbl&gt; 1977, 200, 1050, 1298, 1855, 275, 1835, 691, 715, 2~</code></pre>
+</div>
 </div>
 <p>#(a)</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>matches <span class="sc">%&gt;%</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(tourney_id, tourney_name) <span class="sc">%&gt;%</span></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">num_tournaments =</span> <span class="fu">n</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>matches <span class="sc">%&gt;%</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(tourney_id, tourney_name) <span class="sc">%&gt;%</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">num_tournaments =</span> <span class="fu">n</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 x 1
   num_tournaments
@@ -250,45 +303,62 @@ i Specify the column types or set `show_col_types = FALSE` to quiet this message
 1             128</code></pre>
 </div>
 </div>
+<p>Although the dataset contains some tournaments with tourney_date = 20181231, these belong to the 2019 ATP season (the file atp_matches_2019.csv records all tournaments for the 2019 season, including late-December starts). Therefore, we include them when counting tournaments in 2019. The total number of tournaments in the 2019 ATP season is r n_tournaments$n.</p>
 <p>There were 128 tournaments in 2019.</p>
 <p>#(b)</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>tournament_wins <span class="ot">&lt;-</span> matches <span class="sc">%&gt;%</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(tourney_id, winner_name) <span class="sc">%&gt;%</span></span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(winner_name) <span class="sc">%&gt;%</span></span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">tournaments_won =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(tournaments_won))</span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Show those who won more than one tournament</span></span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>tournament_wins <span class="sc">%&gt;%</span></span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(tournaments_won <span class="sc">&gt;</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">num_players_multi =</span> <span class="fu">n</span>(),</span>
-<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">max_tournaments =</span> <span class="fu">max</span>(tournaments_won)</span>
-<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>winners_by_tourney <span class="ot">&lt;-</span> matches <span class="sc">%&gt;%</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(round <span class="sc">==</span> <span class="st">"F"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">transmute</span>(tourney_id, tourney_name, winner_id, winner_name)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>wins_per_player <span class="ot">&lt;-</span> winners_by_tourney <span class="sc">%&gt;%</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(winner_id, winner_name, <span class="at">name =</span> <span class="st">"tournaments_win"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(tournaments_win))</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>more_than_one <span class="ot">&lt;-</span> wins_per_player <span class="sc">%&gt;%</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(tournaments_win <span class="sc">&gt;</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nrow</span>()</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>max_win <span class="ot">&lt;-</span> wins_per_player <span class="sc">%&gt;%</span></span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">max_win =</span> <span class="fu">max</span>(tournaments_win)) <span class="sc">%&gt;%</span></span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(max_win)</span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>most_winners <span class="ot">&lt;-</span> wins_per_player <span class="sc">%&gt;%</span></span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(tournaments_win <span class="sc">==</span> max_win)</span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>more_than_one</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 1 x 2
-  num_players_multi max_tournaments
-              &lt;int&gt;           &lt;int&gt;
-1               155              21</code></pre>
+<pre><code>[1] 12</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>max_win</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 5</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>most_winners</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 x 3
+  winner_id winner_name    tournaments_win
+      &lt;dbl&gt; &lt;chr&gt;                    &lt;int&gt;
+1    104925 Novak Djokovic               5
+2    106233 Dominic Thiem                5</code></pre>
 </div>
 </div>
-<p>155 players won more than one tournament, and the top players won 21 tournaments.</p>
+<p>12 players won more than one tournament, and the top players won 5 tournaments.(Novak Djokovic &amp; Dominic Thiem)</p>
 <p>#(c)</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>aces <span class="ot">&lt;-</span> matches <span class="sc">%&gt;%</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(w_ace, l_ace) <span class="sc">%&gt;%</span></span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="fu">everything</span>(), <span class="at">names_to =</span> <span class="st">"role"</span>, <span class="at">values_to =</span> <span class="st">"aces"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">role =</span> <span class="fu">if_else</span>(role <span class="sc">==</span> <span class="st">"w_ace"</span>, <span class="st">"Winner"</span>, <span class="st">"Loser"</span>))</span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute summary statistics</span></span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>aces <span class="sc">%&gt;%</span></span>
-<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(role) <span class="sc">%&gt;%</span></span>
-<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean_aces =</span> <span class="fu">mean</span>(aces, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">median_aces =</span> <span class="fu">median</span>(aces, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">sum</span>(<span class="sc">!</span><span class="fu">is.na</span>(aces))</span>
-<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>aces <span class="ot">&lt;-</span> matches <span class="sc">%&gt;%</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(w_ace, l_ace) <span class="sc">%&gt;%</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="fu">everything</span>(), <span class="at">names_to =</span> <span class="st">"role"</span>, <span class="at">values_to =</span> <span class="st">"aces"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">role =</span> <span class="fu">if_else</span>(role <span class="sc">==</span> <span class="st">"w_ace"</span>, <span class="st">"Winner"</span>, <span class="st">"Loser"</span>))</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute summary statistics</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>aces <span class="sc">%&gt;%</span></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(role) <span class="sc">%&gt;%</span></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean_aces =</span> <span class="fu">mean</span>(aces, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">median_aces =</span> <span class="fu">median</span>(aces, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">sum</span>(<span class="sc">!</span><span class="fu">is.na</span>(aces))</span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 x 4
   role   mean_aces median_aces     n
@@ -296,44 +366,44 @@ i Specify the column types or set `show_col_types = FALSE` to quiet this message
 1 Loser       5.79           4  2694
 2 Winner      7.50           6  2694</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Hypothesis test using tidyverse-compatible package</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(infer)</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>obs_stat <span class="ot">&lt;-</span> aces <span class="sc">%&gt;%</span></span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">specify</span>(aces <span class="sc">~</span> role) <span class="sc">%&gt;%</span>              </span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">calculate</span>(<span class="at">stat =</span> <span class="st">"diff in means"</span>, <span class="at">order =</span> <span class="fu">c</span>(<span class="st">"Winner"</span>, <span class="st">"Loser"</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(stat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Hypothesis test using tidyverse-compatible package</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(infer)</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>obs_stat <span class="ot">&lt;-</span> aces <span class="sc">%&gt;%</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">specify</span>(aces <span class="sc">~</span> role) <span class="sc">%&gt;%</span>              </span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">calculate</span>(<span class="at">stat =</span> <span class="st">"diff in means"</span>, <span class="at">order =</span> <span class="fu">c</span>(<span class="st">"Winner"</span>, <span class="st">"Loser"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(stat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: Removed 224 rows containing missing values.</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>obs_stat</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>obs_stat</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 1.7049</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2025</span>) </span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>null_dist <span class="ot">&lt;-</span> aces <span class="sc">%&gt;%</span></span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">specify</span>(aces <span class="sc">~</span> role) <span class="sc">%&gt;%</span></span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">hypothesize</span>(<span class="at">null =</span> <span class="st">"independence"</span>) <span class="sc">%&gt;%</span>     </span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">generate</span>(<span class="at">reps =</span> <span class="dv">5000</span>, <span class="at">type =</span> <span class="st">"permute"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">calculate</span>(<span class="at">stat =</span> <span class="st">"diff in means"</span>, <span class="at">order =</span> <span class="fu">c</span>(<span class="st">"Winner"</span>, <span class="st">"Loser"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2025</span>) </span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>null_dist <span class="ot">&lt;-</span> aces <span class="sc">%&gt;%</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">specify</span>(aces <span class="sc">~</span> role) <span class="sc">%&gt;%</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">hypothesize</span>(<span class="at">null =</span> <span class="st">"independence"</span>) <span class="sc">%&gt;%</span>     </span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">generate</span>(<span class="at">reps =</span> <span class="dv">5000</span>, <span class="at">type =</span> <span class="st">"permute"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">calculate</span>(<span class="at">stat =</span> <span class="st">"diff in means"</span>, <span class="at">order =</span> <span class="fu">c</span>(<span class="st">"Winner"</span>, <span class="st">"Loser"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: Removed 224 rows containing missing values.</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>p_value <span class="ot">&lt;-</span> null_dist <span class="sc">%&gt;%</span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">p =</span> <span class="fu">mean</span>(stat <span class="sc">&gt;=</span> obs_stat)) <span class="sc">%&gt;%</span></span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(p)</span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>p_value</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>p_value <span class="ot">&lt;-</span> null_dist <span class="sc">%&gt;%</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">p =</span> <span class="fu">mean</span>(stat <span class="sc">&gt;=</span> obs_stat)) <span class="sc">%&gt;%</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(p)</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>p_value</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>null_dist <span class="sc">%&gt;%</span></span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> stat)) <span class="sc">+</span></span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">60</span>) <span class="sc">+</span></span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> obs_stat, <span class="at">color =</span> <span class="st">"red"</span>) <span class="sc">+</span></span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Permutation null distribution: diff in means (Winner - Loser)"</span>,</span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="fu">paste0</span>(<span class="st">"observed diff = "</span>, <span class="fu">round</span>(obs_stat, <span class="dv">3</span>), <span class="st">", p = "</span>, <span class="fu">signif</span>(p_value, <span class="dv">3</span>)),</span>
-<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Difference in means"</span>, <span class="at">y =</span> <span class="st">"Count"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>null_dist <span class="sc">%&gt;%</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> stat)) <span class="sc">+</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">60</span>) <span class="sc">+</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> obs_stat, <span class="at">color =</span> <span class="st">"red"</span>) <span class="sc">+</span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Permutation null distribution: diff in means (Winner - Loser)"</span>,</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="fu">paste0</span>(<span class="st">"observed diff = "</span>, <span class="fu">round</span>(obs_stat, <span class="dv">3</span>), <span class="st">", p = "</span>, <span class="fu">signif</span>(p_value, <span class="dv">3</span>)),</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Difference in means"</span>, <span class="at">y =</span> <span class="st">"Count"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -347,27 +417,27 @@ i Specify the column types or set `show_col_types = FALSE` to quiet this message
 <p>Therefore, we reject the null hypothesis and conclude that there is strong statistical evidence that match winners serve significantly more aces than losers in the 2019 ATP data.</p>
 <p>#(d)</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>player_stats <span class="ot">&lt;-</span> matches <span class="sc">%&gt;%</span></span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># count wins</span></span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(winner_name, <span class="at">name =</span> <span class="st">"wins"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">player =</span> winner_name) <span class="sc">%&gt;%</span></span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">full_join</span>(</span>
-<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>    matches <span class="sc">%&gt;%</span></span>
-<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>      <span class="fu">count</span>(loser_name, <span class="at">name =</span> <span class="st">"losses"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>      <span class="fu">rename</span>(<span class="at">player =</span> loser_name),</span>
-<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">by =</span> <span class="st">"player"</span></span>
-<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">replace_na</span>(<span class="fu">list</span>(<span class="at">wins =</span> <span class="dv">0</span>, <span class="at">losses =</span> <span class="dv">0</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_matches =</span> wins <span class="sc">+</span> losses,</span>
-<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">win_rate =</span> wins <span class="sc">/</span> total_matches</span>
-<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter for players with ≥5 matches and sort by win rate</span></span>
-<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a>player_stats <span class="sc">%&gt;%</span></span>
-<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(total_matches <span class="sc">&gt;=</span> <span class="dv">5</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb31-20"><a href="#cb31-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(win_rate)) <span class="sc">%&gt;%</span></span>
-<span id="cb31-21"><a href="#cb31-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>player_stats <span class="ot">&lt;-</span> matches <span class="sc">%&gt;%</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># count wins</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(winner_name, <span class="at">name =</span> <span class="st">"wins"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">player =</span> winner_name) <span class="sc">%&gt;%</span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">full_join</span>(</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>    matches <span class="sc">%&gt;%</span></span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>      <span class="fu">count</span>(loser_name, <span class="at">name =</span> <span class="st">"losses"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>      <span class="fu">rename</span>(<span class="at">player =</span> loser_name),</span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">by =</span> <span class="st">"player"</span></span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">replace_na</span>(<span class="fu">list</span>(<span class="at">wins =</span> <span class="dv">0</span>, <span class="at">losses =</span> <span class="dv">0</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_matches =</span> wins <span class="sc">+</span> losses,</span>
+<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">win_rate =</span> wins <span class="sc">/</span> total_matches</span>
+<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-17"><a href="#cb36-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter for players with ≥5 matches and sort by win rate</span></span>
+<span id="cb36-18"><a href="#cb36-18" aria-hidden="true" tabindex="-1"></a>player_stats <span class="sc">%&gt;%</span></span>
+<span id="cb36-19"><a href="#cb36-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(total_matches <span class="sc">&gt;=</span> <span class="dv">5</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb36-20"><a href="#cb36-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(win_rate)) <span class="sc">%&gt;%</span></span>
+<span id="cb36-21"><a href="#cb36-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 10 x 5
    player              wins losses total_matches win_rate
@@ -387,13 +457,13 @@ i Specify the column types or set `show_col_types = FALSE` to quiet this message
 <p>Among players with &gt;= matches, Rafael Nadal had the highest win rate.</p>
 <p>##3</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ---- Setup ----</span></span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Install packages if you don't have them (uncomment if needed)</span></span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages(c("tidyverse", "scales", "lubridate", "pracma", "viridis"))</span></span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span>
-<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(scales)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ---- Setup ----</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Install packages if you don't have them (uncomment if needed)</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages(c("tidyverse", "scales", "lubridate", "pracma", "viridis"))</span></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(scales)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>
 Attaching package: 'scales'</code></pre>
@@ -408,7 +478,7 @@ Attaching package: 'scales'</code></pre>
 
     col_factor</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pracma)   <span class="co"># for findpeaks()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pracma)   <span class="co"># for findpeaks()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>
 Attaching package: 'pracma'</code></pre>
@@ -418,8 +488,8 @@ Attaching package: 'pracma'</code></pre>
 
     cross</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggrepel)     <span class="co"># nicer labels on plots</span></span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(viridis)  <span class="co"># nice color palette</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggrepel)     <span class="co"># nicer labels on plots</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(viridis)  <span class="co"># nice color palette</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Loading required package: viridisLite</code></pre>
 </div>
@@ -432,12 +502,12 @@ Attaching package: 'viridis'</code></pre>
 
     viridis_pal</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ---- 1. Load data ----</span></span>
-<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>url <span class="ot">&lt;-</span> <span class="st">"https://raw.githubusercontent.com/nytimes/covid-19-data/refs/heads/master/rolling-averages/us-states.csv"</span></span>
-<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(url, <span class="at">col_types =</span> <span class="fu">cols</span>())</span>
-<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Inspect</span></span>
-<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ---- 1. Load data ----</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>url <span class="ot">&lt;-</span> <span class="st">"https://raw.githubusercontent.com/nytimes/covid-19-data/refs/heads/master/rolling-averages/us-states.csv"</span></span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(url, <span class="at">col_types =</span> <span class="fu">cols</span>())</span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Inspect</span></span>
+<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Rows: 61,942
 Columns: 9
@@ -451,90 +521,115 @@ $ deaths              &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 $ deaths_avg          &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,~
 $ deaths_avg_per_100k &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,~</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Expect columns like: date, state, cases, cases_avg, cases_avg_per_100k, deaths, deaths_avg, deaths_avg_per_100k</span></span>
-<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>states <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(url,</span>
-<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">col_types =</span> <span class="fu">cols</span>(</span>
-<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">date =</span> <span class="fu">col_date</span>(<span class="at">format =</span> <span class="st">""</span>),</span>
-<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>                     <span class="at">geoid =</span> <span class="fu">col_character</span>(),</span>
-<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>                     <span class="at">state =</span> <span class="fu">col_character</span>(),</span>
-<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a>                     <span class="at">cases =</span> <span class="fu">col_double</span>(),</span>
-<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a>                     <span class="at">cases_avg =</span> <span class="fu">col_double</span>(),</span>
-<span id="cb46-10"><a href="#cb46-10" aria-hidden="true" tabindex="-1"></a>                     <span class="at">cases_avg_per_100k =</span> <span class="fu">col_double</span>(),</span>
-<span id="cb46-11"><a href="#cb46-11" aria-hidden="true" tabindex="-1"></a>                     <span class="at">deaths =</span> <span class="fu">col_double</span>(),</span>
-<span id="cb46-12"><a href="#cb46-12" aria-hidden="true" tabindex="-1"></a>                     <span class="at">deaths_avg =</span> <span class="fu">col_double</span>(),</span>
-<span id="cb46-13"><a href="#cb46-13" aria-hidden="true" tabindex="-1"></a>                     <span class="at">deaths_avg_per_100k =</span> <span class="fu">col_double</span>()</span>
-<span id="cb46-14"><a href="#cb46-14" aria-hidden="true" tabindex="-1"></a>                   ))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Expect columns like: date, state, cases, cases_avg, cases_avg_per_100k, deaths, deaths_avg, deaths_avg_per_100k</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>states <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(url,</span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">col_types =</span> <span class="fu">cols</span>(</span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">date =</span> <span class="fu">col_date</span>(<span class="at">format =</span> <span class="st">""</span>),</span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>                     <span class="at">geoid =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a>                     <span class="at">state =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a>                     <span class="at">cases =</span> <span class="fu">col_double</span>(),</span>
+<span id="cb51-9"><a href="#cb51-9" aria-hidden="true" tabindex="-1"></a>                     <span class="at">cases_avg =</span> <span class="fu">col_double</span>(),</span>
+<span id="cb51-10"><a href="#cb51-10" aria-hidden="true" tabindex="-1"></a>                     <span class="at">cases_avg_per_100k =</span> <span class="fu">col_double</span>(),</span>
+<span id="cb51-11"><a href="#cb51-11" aria-hidden="true" tabindex="-1"></a>                     <span class="at">deaths =</span> <span class="fu">col_double</span>(),</span>
+<span id="cb51-12"><a href="#cb51-12" aria-hidden="true" tabindex="-1"></a>                     <span class="at">deaths_avg =</span> <span class="fu">col_double</span>(),</span>
+<span id="cb51-13"><a href="#cb51-13" aria-hidden="true" tabindex="-1"></a>                     <span class="at">deaths_avg_per_100k =</span> <span class="fu">col_double</span>()</span>
+<span id="cb51-14"><a href="#cb51-14" aria-hidden="true" tabindex="-1"></a>                   ))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>#(a)</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co"># helper: detect local maxima (simple approach)</span></span>
-<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>is_local_peak <span class="ot">&lt;-</span> <span class="cf">function</span>(x, <span class="at">span =</span> <span class="dv">7</span>) {</span>
-<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># returns logical vector same length as x indicating local maxima within +/- floor(span/2)</span></span>
-<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>  n <span class="ot">&lt;-</span> <span class="fu">length</span>(x)</span>
-<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>  s <span class="ot">&lt;-</span> <span class="fu">floor</span>(span<span class="sc">/</span><span class="dv">2</span>)</span>
-<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map_lgl</span>(<span class="fu">seq_along</span>(x), <span class="sc">~</span>{</span>
-<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a>    i <span class="ot">&lt;-</span> .x</span>
-<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">is.na</span>(x[i])) <span class="fu">return</span>(<span class="cn">FALSE</span>)</span>
-<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a>    left <span class="ot">&lt;-</span> <span class="fu">max</span>(<span class="dv">1</span>, i <span class="sc">-</span> s)</span>
-<span id="cb47-10"><a href="#cb47-10" aria-hidden="true" tabindex="-1"></a>    right <span class="ot">&lt;-</span> <span class="fu">min</span>(n, i <span class="sc">+</span> s)</span>
-<span id="cb47-11"><a href="#cb47-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">all</span>(x[i] <span class="sc">&gt;=</span> x[left<span class="sc">:</span>right], <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">&amp;&amp;</span> <span class="fu">any</span>(x[i] <span class="sc">&gt;</span> x[left<span class="sc">:</span>right], <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb47-12"><a href="#cb47-12" aria-hidden="true" tabindex="-1"></a>  })</span>
-<span id="cb47-13"><a href="#cb47-13" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb47-14"><a href="#cb47-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-15"><a href="#cb47-15" aria-hidden="true" tabindex="-1"></a><span class="co"># find peaks per state</span></span>
-<span id="cb47-16"><a href="#cb47-16" aria-hidden="true" tabindex="-1"></a>peaks <span class="ot">&lt;-</span> states <span class="sc">%&gt;%</span></span>
-<span id="cb47-17"><a href="#cb47-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(state, date) <span class="sc">%&gt;%</span></span>
-<span id="cb47-18"><a href="#cb47-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(state) <span class="sc">%&gt;%</span></span>
-<span id="cb47-19"><a href="#cb47-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">is_peak =</span> <span class="fu">is_local_peak</span>(cases_avg_per_100k, <span class="at">span =</span> <span class="dv">15</span>)) <span class="sc">%&gt;%</span>  <span class="co"># span tuned for ~2-week window</span></span>
-<span id="cb47-20"><a href="#cb47-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(is_peak) <span class="sc">%&gt;%</span></span>
-<span id="cb47-21"><a href="#cb47-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
-<span id="cb47-22"><a href="#cb47-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-23"><a href="#cb47-23" aria-hidden="true" tabindex="-1"></a><span class="co"># classify peak sizes across all peaks</span></span>
-<span id="cb47-24"><a href="#cb47-24" aria-hidden="true" tabindex="-1"></a>peak_thresholds <span class="ot">&lt;-</span> <span class="fu">quantile</span>(peaks<span class="sc">$</span>cases_avg_per_100k, <span class="at">probs =</span> <span class="fu">c</span>(<span class="fl">0.60</span>, <span class="fl">0.90</span>), <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb47-25"><a href="#cb47-25" aria-hidden="true" tabindex="-1"></a>peaks <span class="ot">&lt;-</span> peaks <span class="sc">%&gt;%</span></span>
-<span id="cb47-26"><a href="#cb47-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">size =</span> <span class="fu">case_when</span>(</span>
-<span id="cb47-27"><a href="#cb47-27" aria-hidden="true" tabindex="-1"></a>    cases_avg_per_100k <span class="sc">&gt;=</span> peak_thresholds[<span class="dv">2</span>] <span class="sc">~</span> <span class="st">"major"</span>,</span>
-<span id="cb47-28"><a href="#cb47-28" aria-hidden="true" tabindex="-1"></a>    cases_avg_per_100k <span class="sc">&gt;=</span> peak_thresholds[<span class="dv">1</span>] <span class="sc">~</span> <span class="st">"minor"</span>,</span>
-<span id="cb47-29"><a href="#cb47-29" aria-hidden="true" tabindex="-1"></a>    <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">"small"</span></span>
-<span id="cb47-30"><a href="#cb47-30" aria-hidden="true" tabindex="-1"></a>  ))</span>
-<span id="cb47-31"><a href="#cb47-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-32"><a href="#cb47-32" aria-hidden="true" tabindex="-1"></a><span class="co"># summary counts (how many major/minor peaks total across all states)</span></span>
-<span id="cb47-33"><a href="#cb47-33" aria-hidden="true" tabindex="-1"></a>peaks_summary <span class="ot">&lt;-</span> peaks <span class="sc">%&gt;%</span></span>
-<span id="cb47-34"><a href="#cb47-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(size) <span class="sc">%&gt;%</span></span>
-<span id="cb47-35"><a href="#cb47-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(n))</span>
-<span id="cb47-36"><a href="#cb47-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-37"><a href="#cb47-37" aria-hidden="true" tabindex="-1"></a><span class="co"># plot: US median trajectory + vertical rugs at aggregated major/minor peak dates</span></span>
-<span id="cb47-38"><a href="#cb47-38" aria-hidden="true" tabindex="-1"></a>us_median <span class="ot">&lt;-</span> states <span class="sc">%&gt;%</span></span>
-<span id="cb47-39"><a href="#cb47-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(date) <span class="sc">%&gt;%</span></span>
-<span id="cb47-40"><a href="#cb47-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">median_cases_per_100k =</span> <span class="fu">median</span>(cases_avg_per_100k, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb47-41"><a href="#cb47-41" aria-hidden="true" tabindex="-1"></a>            <span class="at">p90 =</span> <span class="fu">quantile</span>(cases_avg_per_100k, <span class="fl">0.90</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb47-42"><a href="#cb47-42" aria-hidden="true" tabindex="-1"></a>            <span class="at">p10 =</span> <span class="fu">quantile</span>(cases_avg_per_100k, <span class="fl">0.10</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb47-43"><a href="#cb47-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
-<span id="cb47-44"><a href="#cb47-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-45"><a href="#cb47-45" aria-hidden="true" tabindex="-1"></a>agg_peaks <span class="ot">&lt;-</span> peaks <span class="sc">%&gt;%</span></span>
-<span id="cb47-46"><a href="#cb47-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(date, size) <span class="sc">%&gt;%</span></span>
-<span id="cb47-47"><a href="#cb47-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">n_states =</span> <span class="fu">n</span>(), <span class="at">.groups =</span> <span class="st">"drop"</span>)</span>
-<span id="cb47-48"><a href="#cb47-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-49"><a href="#cb47-49" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(us_median, <span class="fu">aes</span>(<span class="at">x =</span> date, <span class="at">y =</span> median_cases_per_100k)) <span class="sc">+</span></span>
-<span id="cb47-50"><a href="#cb47-50" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> p10, <span class="at">ymax =</span> p90), <span class="at">alpha =</span> <span class="fl">0.15</span>) <span class="sc">+</span></span>
-<span id="cb47-51"><a href="#cb47-51" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb47-52"><a href="#cb47-52" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="at">data =</span> agg_peaks <span class="sc">%&gt;%</span> <span class="fu">filter</span>(size <span class="sc">==</span> <span class="st">"major"</span>),</span>
-<span id="cb47-53"><a href="#cb47-53" aria-hidden="true" tabindex="-1"></a>               <span class="fu">aes</span>(<span class="at">x =</span> date, <span class="at">xend =</span> date, <span class="at">y =</span> <span class="dv">0</span>, <span class="at">yend =</span> <span class="fl">0.9</span> <span class="sc">*</span> <span class="fu">max</span>(us_median<span class="sc">$</span>median_cases_per_100k, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)),</span>
-<span id="cb47-54"><a href="#cb47-54" aria-hidden="true" tabindex="-1"></a>               <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
-<span id="cb47-55"><a href="#cb47-55" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="at">data =</span> agg_peaks <span class="sc">%&gt;%</span> <span class="fu">filter</span>(size <span class="sc">==</span> <span class="st">"minor"</span>),</span>
-<span id="cb47-56"><a href="#cb47-56" aria-hidden="true" tabindex="-1"></a>               <span class="fu">aes</span>(<span class="at">x =</span> date, <span class="at">xend =</span> date, <span class="at">y =</span> <span class="dv">0</span>, <span class="at">yend =</span> <span class="fl">0.55</span> <span class="sc">*</span> <span class="fu">max</span>(us_median<span class="sc">$</span>median_cases_per_100k, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)),</span>
-<span id="cb47-57"><a href="#cb47-57" aria-hidden="true" tabindex="-1"></a>               <span class="at">color =</span> <span class="st">"orange"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb47-58"><a href="#cb47-58" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name =</span> <span class="st">"Median 7-day avg cases per 100k"</span>,</span>
-<span id="cb47-59"><a href="#cb47-59" aria-hidden="true" tabindex="-1"></a>                     <span class="at">labels =</span> scales<span class="sc">::</span><span class="fu">label_number</span>(<span class="at">accuracy =</span> <span class="fl">0.1</span>)) <span class="sc">+</span></span>
-<span id="cb47-60"><a href="#cb47-60" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"US median trajectory of 7-day avg cases per 100k with aggregated peaks"</span>,</span>
-<span id="cb47-61"><a href="#cb47-61" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Red vertical lines = aggregated 'major' peaks (top 10% of peak heights across states); orange = 'minor' peaks"</span>,</span>
-<span id="cb47-62"><a href="#cb47-62" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">caption =</span> <span class="st">"Data: NYTimes rolling-averages (states)."</span>) <span class="sc">+</span></span>
-<span id="cb47-63"><a href="#cb47-63" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Helper function: detect local peaks ---</span></span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>is_local_peak <span class="ot">&lt;-</span> <span class="cf">function</span>(x, <span class="at">span =</span> <span class="dv">7</span>) {</span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>  n <span class="ot">&lt;-</span> <span class="fu">length</span>(x)</span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>  s <span class="ot">&lt;-</span> <span class="fu">floor</span>(span <span class="sc">/</span> <span class="dv">2</span>)</span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map_lgl</span>(<span class="fu">seq_along</span>(x), <span class="sc">~</span>{</span>
+<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a>    i <span class="ot">&lt;-</span> .x</span>
+<span id="cb52-7"><a href="#cb52-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">is.na</span>(x[i])) <span class="fu">return</span>(<span class="cn">FALSE</span>)</span>
+<span id="cb52-8"><a href="#cb52-8" aria-hidden="true" tabindex="-1"></a>    left <span class="ot">&lt;-</span> <span class="fu">max</span>(<span class="dv">1</span>, i <span class="sc">-</span> s)</span>
+<span id="cb52-9"><a href="#cb52-9" aria-hidden="true" tabindex="-1"></a>    right <span class="ot">&lt;-</span> <span class="fu">min</span>(n, i <span class="sc">+</span> s)</span>
+<span id="cb52-10"><a href="#cb52-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">all</span>(x[i] <span class="sc">&gt;=</span> x[left<span class="sc">:</span>right], <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">&amp;&amp;</span> <span class="fu">any</span>(x[i] <span class="sc">&gt;</span> x[left<span class="sc">:</span>right], <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb52-11"><a href="#cb52-11" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb52-12"><a href="#cb52-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb52-13"><a href="#cb52-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-14"><a href="#cb52-14" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Detect peaks per state ---</span></span>
+<span id="cb52-15"><a href="#cb52-15" aria-hidden="true" tabindex="-1"></a>peaks <span class="ot">&lt;-</span> states <span class="sc">%&gt;%</span></span>
+<span id="cb52-16"><a href="#cb52-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(state, date) <span class="sc">%&gt;%</span></span>
+<span id="cb52-17"><a href="#cb52-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(state) <span class="sc">%&gt;%</span></span>
+<span id="cb52-18"><a href="#cb52-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">is_peak =</span> <span class="fu">is_local_peak</span>(cases_avg_per_100k, <span class="at">span =</span> <span class="dv">15</span>)) <span class="sc">%&gt;%</span>  <span class="co"># 15 more smooth</span></span>
+<span id="cb52-19"><a href="#cb52-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(is_peak) <span class="sc">%&gt;%</span></span>
+<span id="cb52-20"><a href="#cb52-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb52-21"><a href="#cb52-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-22"><a href="#cb52-22" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Classify peak sizes ---</span></span>
+<span id="cb52-23"><a href="#cb52-23" aria-hidden="true" tabindex="-1"></a>peak_thresholds <span class="ot">&lt;-</span> <span class="fu">quantile</span>(peaks<span class="sc">$</span>cases_avg_per_100k, <span class="at">probs =</span> <span class="fu">c</span>(<span class="fl">0.60</span>, <span class="fl">0.90</span>), <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb52-24"><a href="#cb52-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-25"><a href="#cb52-25" aria-hidden="true" tabindex="-1"></a>peaks <span class="ot">&lt;-</span> peaks <span class="sc">%&gt;%</span></span>
+<span id="cb52-26"><a href="#cb52-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">size =</span> <span class="fu">case_when</span>(</span>
+<span id="cb52-27"><a href="#cb52-27" aria-hidden="true" tabindex="-1"></a>    cases_avg_per_100k <span class="sc">&gt;=</span> peak_thresholds[<span class="dv">2</span>] <span class="sc">~</span> <span class="st">"major"</span>,</span>
+<span id="cb52-28"><a href="#cb52-28" aria-hidden="true" tabindex="-1"></a>    cases_avg_per_100k <span class="sc">&gt;=</span> peak_thresholds[<span class="dv">1</span>] <span class="sc">~</span> <span class="st">"minor"</span>,</span>
+<span id="cb52-29"><a href="#cb52-29" aria-hidden="true" tabindex="-1"></a>    <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">"small"</span></span>
+<span id="cb52-30"><a href="#cb52-30" aria-hidden="true" tabindex="-1"></a>  ))</span>
+<span id="cb52-31"><a href="#cb52-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-32"><a href="#cb52-32" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Summarize US-level median and quantiles ---</span></span>
+<span id="cb52-33"><a href="#cb52-33" aria-hidden="true" tabindex="-1"></a>us_median <span class="ot">&lt;-</span> states <span class="sc">%&gt;%</span></span>
+<span id="cb52-34"><a href="#cb52-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(date) <span class="sc">%&gt;%</span></span>
+<span id="cb52-35"><a href="#cb52-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(</span>
+<span id="cb52-36"><a href="#cb52-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">median_cases_per_100k =</span> <span class="fu">median</span>(cases_avg_per_100k, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb52-37"><a href="#cb52-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">p90 =</span> <span class="fu">quantile</span>(cases_avg_per_100k, <span class="fl">0.90</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb52-38"><a href="#cb52-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">p10 =</span> <span class="fu">quantile</span>(cases_avg_per_100k, <span class="fl">0.10</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb52-39"><a href="#cb52-39" aria-hidden="true" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">"drop"</span></span>
+<span id="cb52-40"><a href="#cb52-40" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb52-41"><a href="#cb52-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-42"><a href="#cb52-42" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Aggregate peaks by date ---</span></span>
+<span id="cb52-43"><a href="#cb52-43" aria-hidden="true" tabindex="-1"></a>agg_peaks <span class="ot">&lt;-</span> peaks <span class="sc">%&gt;%</span></span>
+<span id="cb52-44"><a href="#cb52-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(date, size) <span class="sc">%&gt;%</span></span>
+<span id="cb52-45"><a href="#cb52-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">n_states =</span> <span class="fu">n</span>(), <span class="at">.groups =</span> <span class="st">"drop"</span>)</span>
+<span id="cb52-46"><a href="#cb52-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-47"><a href="#cb52-47" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Filter only peaks where &gt;= 5 states reached a peak that day ---</span></span>
+<span id="cb52-48"><a href="#cb52-48" aria-hidden="true" tabindex="-1"></a>agg_peaks_filtered <span class="ot">&lt;-</span> agg_peaks <span class="sc">%&gt;%</span></span>
+<span id="cb52-49"><a href="#cb52-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(n_states <span class="sc">&gt;=</span> <span class="dv">5</span>)</span>
+<span id="cb52-50"><a href="#cb52-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-51"><a href="#cb52-51" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Create final plot ---</span></span>
+<span id="cb52-52"><a href="#cb52-52" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(us_median, <span class="fu">aes</span>(<span class="at">x =</span> date, <span class="at">y =</span> median_cases_per_100k)) <span class="sc">+</span></span>
+<span id="cb52-53"><a href="#cb52-53" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Ribbon for middle 80% of states</span></span>
+<span id="cb52-54"><a href="#cb52-54" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> p10, <span class="at">ymax =</span> p90), <span class="at">fill =</span> <span class="st">"grey70"</span>, <span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb52-55"><a href="#cb52-55" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Median curve</span></span>
+<span id="cb52-56"><a href="#cb52-56" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">color =</span> <span class="st">"steelblue"</span>, <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb52-57"><a href="#cb52-57" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Smooth trend (loess)</span></span>
+<span id="cb52-58"><a href="#cb52-58" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">color =</span> <span class="st">"blue"</span>, <span class="at">span =</span> <span class="fl">0.15</span>,</span>
+<span id="cb52-59"><a href="#cb52-59" aria-hidden="true" tabindex="-1"></a>              <span class="at">linewidth =</span> <span class="fl">1.1</span>, <span class="at">linetype =</span> <span class="st">"longdash"</span>) <span class="sc">+</span></span>
+<span id="cb52-60"><a href="#cb52-60" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Major peak lines</span></span>
+<span id="cb52-61"><a href="#cb52-61" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="at">data =</span> agg_peaks_filtered <span class="sc">%&gt;%</span> <span class="fu">filter</span>(size <span class="sc">==</span> <span class="st">"major"</span>),</span>
+<span id="cb52-62"><a href="#cb52-62" aria-hidden="true" tabindex="-1"></a>               <span class="fu">aes</span>(<span class="at">x =</span> date, <span class="at">xend =</span> date,</span>
+<span id="cb52-63"><a href="#cb52-63" aria-hidden="true" tabindex="-1"></a>                   <span class="at">y =</span> <span class="dv">0</span>, <span class="at">yend =</span> <span class="fl">0.9</span> <span class="sc">*</span> <span class="fu">max</span>(us_median<span class="sc">$</span>median_cases_per_100k, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)),</span>
+<span id="cb52-64"><a href="#cb52-64" aria-hidden="true" tabindex="-1"></a>               <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">alpha =</span> <span class="fl">0.4</span>, <span class="at">linewidth =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb52-65"><a href="#cb52-65" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Minor peak lines</span></span>
+<span id="cb52-66"><a href="#cb52-66" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="at">data =</span> agg_peaks_filtered <span class="sc">%&gt;%</span> <span class="fu">filter</span>(size <span class="sc">==</span> <span class="st">"minor"</span>),</span>
+<span id="cb52-67"><a href="#cb52-67" aria-hidden="true" tabindex="-1"></a>               <span class="fu">aes</span>(<span class="at">x =</span> date, <span class="at">xend =</span> date,</span>
+<span id="cb52-68"><a href="#cb52-68" aria-hidden="true" tabindex="-1"></a>                   <span class="at">y =</span> <span class="dv">0</span>, <span class="at">yend =</span> <span class="fl">0.55</span> <span class="sc">*</span> <span class="fu">max</span>(us_median<span class="sc">$</span>median_cases_per_100k, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)),</span>
+<span id="cb52-69"><a href="#cb52-69" aria-hidden="true" tabindex="-1"></a>               <span class="at">color =</span> <span class="st">"orange"</span>, <span class="at">alpha =</span> <span class="fl">0.3</span>, <span class="at">linewidth =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb52-70"><a href="#cb52-70" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(</span>
+<span id="cb52-71"><a href="#cb52-71" aria-hidden="true" tabindex="-1"></a>    <span class="at">name =</span> <span class="st">"Median 7-day avg cases per 100k"</span>,</span>
+<span id="cb52-72"><a href="#cb52-72" aria-hidden="true" tabindex="-1"></a>    <span class="at">labels =</span> scales<span class="sc">::</span><span class="fu">label_number</span>(<span class="at">accuracy =</span> <span class="fl">0.1</span>)</span>
+<span id="cb52-73"><a href="#cb52-73" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb52-74"><a href="#cb52-74" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb52-75"><a href="#cb52-75" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Four Major U.S. COVID-19 Waves with Smaller Local Peaks"</span>,</span>
+<span id="cb52-76"><a href="#cb52-76" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Blue dashed line = smoothed median trend | Red = major peaks | Orange = minor peaks</span><span class="sc">\n</span><span class="st">Ribbon shows 10th–90th percentile of state case rates"</span>,</span>
+<span id="cb52-77"><a href="#cb52-77" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="cn">NULL</span>,</span>
+<span id="cb52-78"><a href="#cb52-78" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"Data: NYTimes rolling-averages (us-states.csv)"</span></span>
+<span id="cb52-79"><a href="#cb52-79" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb52-80"><a href="#cb52-80" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>) <span class="sc">+</span></span>
+<span id="cb52-81"><a href="#cb52-81" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb52-82"><a href="#cb52-82" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>, <span class="at">size =</span> <span class="dv">16</span>),</span>
+<span id="cb52-83"><a href="#cb52-83" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.subtitle =</span> <span class="fu">element_text</span>(<span class="at">color =</span> <span class="st">"grey25"</span>, <span class="at">size =</span> <span class="dv">12</span>),</span>
+<span id="cb52-84"><a href="#cb52-84" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.minor =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb52-85"><a href="#cb52-85" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.caption =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>, <span class="at">color =</span> <span class="st">"grey40"</span>),</span>
+<span id="cb52-86"><a href="#cb52-86" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title.y =</span> <span class="fu">element_text</span>(<span class="at">margin =</span> <span class="fu">margin</span>(<span class="at">r =</span> <span class="dv">10</span>))</span>
+<span id="cb52-87"><a href="#cb52-87" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb52-88"><a href="#cb52-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-89"><a href="#cb52-89" aria-hidden="true" tabindex="-1"></a>p1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
-i Please use `linewidth` instead.</code></pre>
+<pre><code>`geom_smooth()` using method = 'gam' and formula = 'y ~ s(x, bs = "cs")'</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>p1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -543,39 +638,73 @@ i Please use `linewidth` instead.</code></pre>
 </div>
 </div>
 </div>
-<p>The plot shows the national median 7-day average of new Covid cases per 100,000 residents from 2020 through 2023. The orange and red vertical lines mark local peaks detected across all states, with red indicating the “major” spikes (the top 10% of peak magnitudes).</p>
-<p>From the plot, we can identify approximately five major waves of Covid in the United States:</p>
-<p>The initial outbreak in early 2020,</p>
-<p>The winter 2020–2021 surge,</p>
-<p>The Delta wave (mid-2021),</p>
-<p>The Omicron wave (late 2021–early 2022), and</p>
-<p>A smaller rebound in mid-2022.</p>
-<p>Minor spikes occur frequently in between, reflecting regional resurgences. The aggregated national trajectory captures both the recurring pattern of resurgence and the overall downward trend in late 2022–2023.</p>
+<p>The figure visualizes the median 7-day average COVID-19 case rate per 100,000 people across U.S. states from 2020 to 2023, highlighting major and minor pandemic waves.</p>
+<p>Blue dashed line: a smoothed national median trend of COVID-19 case rates, representing the typical U.S. state’s experience over time.</p>
+<p>Gray ribbon (10th–90th percentile): shows the variation among states — at each date, 80% of states fell within this band. Wider ribbons indicate greater regional divergence in infection rates.</p>
+<p>Red vertical lines: mark major peaks (top 10% of all detected state-level peaks), corresponding to large nationwide waves. These typically align with known pandemic surges — e.g., winter 2020–21, Delta (mid-2021), Omicron (winter 2021–22).</p>
+<p>Orange bands: mark minor peaks (between 60th and 90th percentile of peak sizes), reflecting smaller, regionally contained waves.</p>
+<p>The plot identifies four major U.S. COVID-19 waves, each separated by smaller local peaks, illustrating how the pandemic became more regionally heterogeneous over time.</p>
+<p>Interpretation summary: The U.S. experienced four nationwide COVID-19 waves, with the Omicron surge (early 2022) being the highest median infection rate. Afterward, minor localized peaks continued but at much lower national intensity, suggesting both improved immunity and regional variation in later phases.</p>
+<p>#(b)</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>state_summary <span class="ot">&lt;-</span> states <span class="sc">%&gt;%</span></span>
-<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(state) <span class="sc">%&gt;%</span></span>
-<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">mean_rate =</span> <span class="fu">mean</span>(cases_avg_per_100k, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">max_rate =</span> <span class="fu">max</span>(cases_avg_per_100k, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">.groups =</span> <span class="st">"drop"</span>)</span>
-<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a>top_states <span class="ot">&lt;-</span> state_summary <span class="sc">%&gt;%</span> <span class="fu">slice_max</span>(mean_rate, <span class="at">n =</span> <span class="dv">3</span>) <span class="sc">%&gt;%</span> <span class="fu">pull</span>(state)</span>
-<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a>bottom_states <span class="ot">&lt;-</span> state_summary <span class="sc">%&gt;%</span> <span class="fu">slice_min</span>(mean_rate, <span class="at">n =</span> <span class="dv">3</span>) <span class="sc">%&gt;%</span> <span class="fu">pull</span>(state)</span>
-<span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a>sel_states <span class="ot">&lt;-</span> <span class="fu">c</span>(top_states, bottom_states)</span>
-<span id="cb50-10"><a href="#cb50-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb50-11"><a href="#cb50-11" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> states <span class="sc">%&gt;%</span></span>
-<span id="cb50-12"><a href="#cb50-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(state <span class="sc">%in%</span> sel_states) <span class="sc">%&gt;%</span></span>
-<span id="cb50-13"><a href="#cb50-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> date, <span class="at">y =</span> cases_avg_per_100k, <span class="at">color =</span> state)) <span class="sc">+</span></span>
-<span id="cb50-14"><a href="#cb50-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb50-15"><a href="#cb50-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> state, <span class="at">ncol =</span> <span class="dv">2</span>, <span class="at">scales =</span> <span class="st">"free_y"</span>) <span class="sc">+</span>   <span class="co"># free_y helps see shapes even if magnitudes differ</span></span>
-<span id="cb50-16"><a href="#cb50-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Trajectories of 7-day avg cases per 100k in highest vs lowest rate states"</span>,</span>
-<span id="cb50-17"><a href="#cb50-17" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="fu">paste</span>(<span class="st">"Top:"</span>, <span class="fu">paste</span>(top_states, <span class="at">collapse =</span> <span class="st">", "</span>), </span>
-<span id="cb50-18"><a href="#cb50-18" aria-hidden="true" tabindex="-1"></a>                        <span class="st">" | Bottom:"</span>, <span class="fu">paste</span>(bottom_states, <span class="at">collapse =</span> <span class="st">", "</span>)),</span>
-<span id="cb50-19"><a href="#cb50-19" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"7-day avg cases per 100k"</span>, <span class="at">x =</span> <span class="cn">NULL</span>,</span>
-<span id="cb50-20"><a href="#cb50-20" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption =</span> <span class="st">"Top/bottom determined by mean 7-day avg per 100k across full period."</span>) <span class="sc">+</span></span>
-<span id="cb50-21"><a href="#cb50-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb50-22"><a href="#cb50-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)</span>
-<span id="cb50-23"><a href="#cb50-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb50-24"><a href="#cb50-24" aria-hidden="true" tabindex="-1"></a>p2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>state_summary <span class="ot">&lt;-</span> states <span class="sc">%&gt;%</span></span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(state) <span class="sc">%&gt;%</span></span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">mean_rate =</span> <span class="fu">mean</span>(cases_avg_per_100k, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">max_rate =</span> <span class="fu">max</span>(cases_avg_per_100k, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">.groups =</span> <span class="st">"drop"</span>)</span>
+<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-7"><a href="#cb54-7" aria-hidden="true" tabindex="-1"></a>top_states <span class="ot">&lt;-</span> state_summary <span class="sc">%&gt;%</span></span>
+<span id="cb54-8"><a href="#cb54-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_max</span>(mean_rate, <span class="at">n =</span> <span class="dv">3</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb54-9"><a href="#cb54-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(state)</span>
+<span id="cb54-10"><a href="#cb54-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-11"><a href="#cb54-11" aria-hidden="true" tabindex="-1"></a>bottom_states <span class="ot">&lt;-</span> state_summary <span class="sc">%&gt;%</span></span>
+<span id="cb54-12"><a href="#cb54-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_min</span>(mean_rate, <span class="at">n =</span> <span class="dv">3</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb54-13"><a href="#cb54-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(state)</span>
+<span id="cb54-14"><a href="#cb54-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-15"><a href="#cb54-15" aria-hidden="true" tabindex="-1"></a>sel_states <span class="ot">&lt;-</span> <span class="fu">c</span>(top_states, bottom_states)</span>
+<span id="cb54-16"><a href="#cb54-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-17"><a href="#cb54-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-18"><a href="#cb54-18" aria-hidden="true" tabindex="-1"></a>top_states</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "American Samoa" "Rhode Island"   "Alaska"        </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>bottom_states</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Maryland" "Maine"    "Oregon"  </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> states <span class="sc">%&gt;%</span></span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(state <span class="sc">%in%</span> sel_states) <span class="sc">%&gt;%</span></span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> date, <span class="at">y =</span> cases_avg_per_100k, <span class="at">color =</span> state)) <span class="sc">+</span></span>
+<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb58-5"><a href="#cb58-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">size =</span> <span class="fl">0.8</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb58-6"><a href="#cb58-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> state, <span class="at">ncol =</span> <span class="dv">2</span>, <span class="at">scales =</span> <span class="st">"free_y"</span>) <span class="sc">+</span></span>
+<span id="cb58-7"><a href="#cb58-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_brewer</span>(<span class="at">palette =</span> <span class="st">"Set1"</span>) <span class="sc">+</span></span>
+<span id="cb58-8"><a href="#cb58-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb58-9"><a href="#cb58-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"COVID-19 Case Trajectories in States with Highest vs Lowest Average Rates"</span>,</span>
+<span id="cb58-10"><a href="#cb58-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="fu">paste</span>(</span>
+<span id="cb58-11"><a href="#cb58-11" aria-hidden="true" tabindex="-1"></a>      <span class="st">"Top 3 states:"</span>, <span class="fu">paste</span>(top_states, <span class="at">collapse =</span> <span class="st">", "</span>),</span>
+<span id="cb58-12"><a href="#cb58-12" aria-hidden="true" tabindex="-1"></a>      <span class="st">" | Bottom 3 states:"</span>, <span class="fu">paste</span>(bottom_states, <span class="at">collapse =</span> <span class="st">", "</span>)</span>
+<span id="cb58-13"><a href="#cb58-13" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb58-14"><a href="#cb58-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"7-day average cases per 100k residents"</span>,</span>
+<span id="cb58-15"><a href="#cb58-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="cn">NULL</span>,</span>
+<span id="cb58-16"><a href="#cb58-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"Data: NYTimes COVID-19 rolling averages (us-states.csv)</span><span class="sc">\n</span><span class="st">Dashed line = smoothed local trend"</span></span>
+<span id="cb58-17"><a href="#cb58-17" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb58-18"><a href="#cb58-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>) <span class="sc">+</span></span>
+<span id="cb58-19"><a href="#cb58-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb58-20"><a href="#cb58-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">"none"</span>,</span>
+<span id="cb58-21"><a href="#cb58-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>, <span class="at">size =</span> <span class="dv">13</span>),</span>
+<span id="cb58-22"><a href="#cb58-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>, <span class="at">size =</span> <span class="dv">16</span>),</span>
+<span id="cb58-23"><a href="#cb58-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.subtitle =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),</span>
+<span id="cb58-24"><a href="#cb58-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>)</span>
+<span id="cb58-25"><a href="#cb58-25" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
+i Please use `linewidth` instead.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>p2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`geom_smooth()` using method = 'gam' and formula = 'y ~ s(x, bs = "cs")'</code></pre>
+</div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -587,35 +716,38 @@ i Please use `linewidth` instead.</code></pre>
 <p>The figure compares states with the highest mean case rates (American Samoa, Rhode Island, Alaska) and those with the lowest (Maryland, Maine, Oregon).</p>
 <p>High-rate states show sharp, tall peaks with brief but intense outbreaks. For instance, Rhode Island and American Samoa experienced extreme but short-lived spikes.</p>
 <p>Low-rate states display flatter trajectories, indicating steadier case control or smaller population outbreaks.</p>
-<p>This contrast suggests that the epidemic intensity varied dramatically by region—possibly reflecting differences in population density, testing availability, and containment policies.</p>
+<p>This contrast suggests that the epidemic intensity varied dramatically by region—possibly reflecting differences in population density, testing availability, and containment policies. #(c)</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>threshold <span class="ot">&lt;-</span> <span class="fl">0.5</span> <span class="co"># daily 7-day avg per 100k; adjust if you prefer stricter definition</span></span>
-<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>first_substantial <span class="ot">&lt;-</span> states <span class="sc">%&gt;%</span></span>
-<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(state, date) <span class="sc">%&gt;%</span></span>
-<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(state) <span class="sc">%&gt;%</span></span>
-<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">above =</span> cases_avg_per_100k <span class="sc">&gt;=</span> threshold,</span>
-<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a>         <span class="co"># run-length encoding trick: find runs of &gt; = threshold</span></span>
-<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a>         <span class="at">run_id =</span> rle_id <span class="ot">&lt;-</span> <span class="fu">with</span>(<span class="fu">rle</span>(above), <span class="fu">rep</span>(<span class="fu">seq_along</span>(lengths), lengths))) <span class="sc">%&gt;%</span></span>
-<span id="cb51-9"><a href="#cb51-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(state, run_id) <span class="sc">%&gt;%</span></span>
-<span id="cb51-10"><a href="#cb51-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">run_length =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
-<span id="cb51-11"><a href="#cb51-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb51-12"><a href="#cb51-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(above <span class="sc">&amp;</span> run_length <span class="sc">&gt;=</span> <span class="dv">3</span>) <span class="sc">%&gt;%</span>   <span class="co"># sustained at least 3 consecutive days</span></span>
-<span id="cb51-13"><a href="#cb51-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(state) <span class="sc">%&gt;%</span></span>
-<span id="cb51-14"><a href="#cb51-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">first_date =</span> <span class="fu">min</span>(date, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb51-15"><a href="#cb51-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(first_date) <span class="sc">%&gt;%</span></span>
-<span id="cb51-16"><a href="#cb51-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_head</span>(<span class="at">n =</span> <span class="dv">5</span>)</span>
-<span id="cb51-17"><a href="#cb51-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-18"><a href="#cb51-18" aria-hidden="true" tabindex="-1"></a>first_substantial</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>threshold <span class="ot">&lt;-</span> <span class="dv">1</span>  <span class="co"># define “substantial”</span></span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>min_days <span class="ot">&lt;-</span> <span class="dv">3</span>   <span class="co"># at least 3 consecutive days</span></span>
+<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-4"><a href="#cb62-4" aria-hidden="true" tabindex="-1"></a>first_substantial <span class="ot">&lt;-</span> states <span class="sc">%&gt;%</span></span>
+<span id="cb62-5"><a href="#cb62-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(state, date) <span class="sc">%&gt;%</span></span>
+<span id="cb62-6"><a href="#cb62-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(state) <span class="sc">%&gt;%</span></span>
+<span id="cb62-7"><a href="#cb62-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb62-8"><a href="#cb62-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">above =</span> cases_avg_per_100k <span class="sc">&gt;=</span> threshold,</span>
+<span id="cb62-9"><a href="#cb62-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># run-length ID per state</span></span>
+<span id="cb62-10"><a href="#cb62-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">run_id =</span> <span class="fu">with</span>(<span class="fu">rle</span>(above), <span class="fu">rep</span>(<span class="fu">seq_along</span>(lengths), lengths))</span>
+<span id="cb62-11"><a href="#cb62-11" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb62-12"><a href="#cb62-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(state, run_id) <span class="sc">%&gt;%</span></span>
+<span id="cb62-13"><a href="#cb62-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">run_length =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb62-14"><a href="#cb62-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb62-15"><a href="#cb62-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(above <span class="sc">&amp;</span> run_length <span class="sc">&gt;=</span> min_days) <span class="sc">%&gt;%</span>   <span class="co"># sustained at least 3 consecutive days</span></span>
+<span id="cb62-16"><a href="#cb62-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(state) <span class="sc">%&gt;%</span></span>
+<span id="cb62-17"><a href="#cb62-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">first_date =</span> <span class="fu">min</span>(date), <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb62-18"><a href="#cb62-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(first_date) <span class="sc">%&gt;%</span></span>
+<span id="cb62-19"><a href="#cb62-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_head</span>(<span class="at">n =</span> <span class="dv">5</span>)</span>
+<span id="cb62-20"><a href="#cb62-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-21"><a href="#cb62-21" aria-hidden="true" tabindex="-1"></a>first_substantial</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 5 x 2
-  state                first_date
-  &lt;chr&gt;                &lt;date&gt;    
-1 Washington           2020-03-11
-2 New York             2020-03-16
-3 Louisiana            2020-03-17
-4 District of Columbia 2020-03-18
-5 Guam                 2020-03-18</code></pre>
+  state      first_date
+  &lt;chr&gt;      &lt;date&gt;    
+1 Washington 2020-03-15
+2 New York   2020-03-18
+3 Guam       2020-03-19
+4 Louisiana  2020-03-19
+5 New Jersey 2020-03-19</code></pre>
 </div>
 </div>
 </section>
