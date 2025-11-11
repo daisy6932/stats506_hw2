@@ -61,8 +61,8 @@ setMethod("ub", "waldCI", function(object, level = 0.95) {
   object@mean + z * object@sterr
 })
 
-setGeneric("mean", function(x) standardGeneric("mean"))
-setMethod("mean", "waldCI", function(x) x@mean)
+setGeneric("getMean", function(x) standardGeneric("getMean"))
+setMethod("getMean", "waldCI", function(x) x@mean)
 
 setGeneric("sterr", function(object) standardGeneric("sterr"))
 setMethod("sterr", "waldCI", function(object) object@sterr)
@@ -72,17 +72,32 @@ setMethod("sterr", "waldCI", function(object) object@sterr)
 ### Setters
 ### =======================================================
 
+# 1) Getter: mean(obj)
+# define generic if not already defined (avoid removing base mean)
+if (!isGeneric("mean")) {
+  setGeneric("mean", function(x, ...) standardGeneric("mean"))
+}
+setMethod("mean", "waldCI", function(x, ...) x@mean)
+
+# 2) Replacement generic: mean<- (must be defined before setReplaceMethod)
+setGeneric("mean<-", function(x, value) standardGeneric("mean<-"))
+
+# 3) Replacement method: mean(obj) <- value
 setReplaceMethod("mean", "waldCI", function(x, value) {
-  new("waldCI", mean = value, sterr = x@sterr)
+  if (!is.numeric(value) || any(!is.finite(value))) stop("mean must be finite numeric")
+  new("waldCI", mean = as.numeric(value), sterr = x@sterr)
 })
 
+setGeneric("sterr<-", function(x, value) standardGeneric("sterr<-"))
 setReplaceMethod("sterr", "waldCI", function(x, value) {
   if (value <= 0) stop("Standard error must be positive")
   new("waldCI", mean = x@mean, sterr = value)
 })
 
+setGeneric("ub<-", function(x, value) standardGeneric("ub<-"))
 
-setReplaceMethod("ub", "waldCI", function(x, level = 0.95, value) {
+setReplaceMethod("ub", "waldCI", function(x, value) {
+  level <- 0.95  
   z <- qnorm(1 - (1 - level) / 2)
   lbv <- lb(x, level)
   new_mean <- (lbv + value) / 2
@@ -90,12 +105,18 @@ setReplaceMethod("ub", "waldCI", function(x, level = 0.95, value) {
   new("waldCI", mean = new_mean, sterr = new_sterr)
 })
 
+setGeneric("lb<-", function(x, ..., value) standardGeneric("lb<-"))
 
-setReplaceMethod("ub", "waldCI", function(x, level = 0.95, value) {
+setReplaceMethod("lb", "waldCI", function(x, ..., value) {
+  dots <- list(...)
+  # 如果用户没传 level，就默认 0.95
+  level <- if (length(dots) >= 1 && is.numeric(dots[[1]])) dots[[1]] else 0.95
+  
   z <- qnorm(1 - (1 - level) / 2)
-  lbv <- lb(x, level)
-  new_mean <- (lbv + value) / 2
-  new_sterr <- (value - lbv) / (2 * z)
+  ubv <- ub(x, level)
+  new_mean <- (value + ubv) / 2
+  new_sterr <- (ubv - value) / (2 * z)
+  
   new("waldCI", mean = new_mean, sterr = new_sterr)
 })
 
